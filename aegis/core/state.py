@@ -18,6 +18,8 @@ class VulnerabilityProof(BaseModel):
     response_status: int
     response_body: Dict[str, Any]
     poc_summary: str
+    mutations_tested: int = 1
+    mutations_succeeded: int = 1
 
 
 class PatchResult(BaseModel):
@@ -27,18 +29,22 @@ class PatchResult(BaseModel):
     target_file: str
     explanation: str
     lines_changed: int
+    ast_validated: bool = True
 
 
 class DualGateResult(BaseModel):
     """Result of the Dual-Gate verification."""
-    security_check_passed: bool      # Exploit is now blocked (must be True)
-    golden_path_passed: bool          # All standard functional flows pass (must be True)
+    security_check_passed: bool           # Exploit is now blocked (must be True)
+    golden_path_passed: bool              # All standard functional flows pass (must be True)
     exploit_output: str
     golden_path_output: str
+    mutations_tested: int = 0
+    mutations_blocked: int = 0
+    code_quality_passed: bool = True
 
     @property
     def fully_passed(self) -> bool:
-        return self.security_check_passed and self.golden_path_passed
+        return self.security_check_passed and self.golden_path_passed and self.code_quality_passed
 
 
 class RoundHistory(BaseModel):
@@ -58,6 +64,7 @@ class AegisState(BaseModel):
     active_vector_ids: List[str] = Field(default_factory=list)
     pending_vectors: List[str] = Field(default_factory=list)
     remediated_vectors: List[str] = Field(default_factory=list)
+    unresolved_vectors: List[str] = Field(default_factory=list)
     
     current_proof: Optional[VulnerabilityProof] = None
     current_patch: Optional[PatchResult] = None
@@ -66,3 +73,8 @@ class AegisState(BaseModel):
     history: List[RoundHistory] = Field(default_factory=list)
     is_converged: bool = False
     total_rounds: int = 0
+
+    @property
+    def is_soundly_converged(self) -> bool:
+        """True only if every vector in active_vector_ids has been verified and remediated with 0 unresolved."""
+        return (len(self.unresolved_vectors) == 0) and (len(self.remediated_vectors) == len(self.active_vector_ids))

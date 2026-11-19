@@ -1,20 +1,19 @@
 """
-Automated Pytest Suite for Aegis.
-Validates the Red Team probes, Blue Team ACI, Golden Path suite,
-Dual-Gate evaluation, and full orchestrator convergence.
+Automated Pytest Suite for Umbrella.
+Validates the Adaptive Red Team mutation probes, Blue Team AST-guided ACI,
+path traversal prevention, Golden Path contract suite, and sound convergence.
 """
 
 import os
 import sys
-import shutil
 import pytest
 from fastapi.testclient import TestClient
 
-# Ensure project root is in sys.path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from aegis.core.orchestrator import AegisOrchestrator
 from aegis.blue.aci import AgentComputerInterface
+from aegis.red.mutator import OAuthPayloadMutator
 from aegis.evaluator.golden_path import GoldenPathSuite
 import aegis.testbed.app as testbed_app
 
@@ -51,15 +50,57 @@ def test_aci_view_and_replace(tmp_path):
     assert "vulnerable" in test_file.read_text()
 
 
-def test_full_orchestration_cycle(tmp_path):
+def test_aci_path_traversal_protection(tmp_path):
+    """Verifies that ACI rejects sibling directory path traversal attempts."""
+    aci = AgentComputerInterface(str(tmp_path))
+    with pytest.raises(PermissionError):
+        aci._resolve_path("../outside_workspace_leak.py")
+
+
+def test_aci_ast_syntax_validation(tmp_path):
+    """Verifies that ACI rejects candidate patches with invalid Python syntax."""
+    test_file = tmp_path / "syntax_check.py"
+    test_file.write_text("def valid_func():\n    return 42\n")
+
+    aci = AgentComputerInterface(str(tmp_path))
+    # Candidate replacement has broken syntax
+    invalid_patch = "def valid_func(broken syntax here"
+    result = aci.replace_block("syntax_check.py", "def valid_func():\n    return 42\n", invalid_patch)
+    assert result is False, "ACI should reject invalid Python syntax"
+    # Ensure file content was not corrupted
+    assert "return 42" in test_file.read_text()
+
+
+def test_mutation_engine():
+    """Verifies that the property-based mutation engine generates multi-variant payloads."""
+    # Test Redirect URI mutations
+    redirect_mutations = OAuthPayloadMutator.mutate_redirect_uri("https://valid.com/cb")
+    assert len(redirect_mutations) >= 4
+    types = [m["type"] for m in redirect_mutations]
+    assert "PLAIN_TRAVERSAL" in types
+    assert "URL_ENCODED_TRAVERSAL" in types
+    assert "DOUBLE_ENCODED_TRAVERSAL" in types
+
+    # Test PKCE mutations
+    pkce_mutations = OAuthPayloadMutator.mutate_pkce_downgrades("test_verifier_123")
+    assert len(pkce_mutations) >= 3
+
+    # Test Scope mutations
+    scope_mutations = OAuthPayloadMutator.mutate_scope_escalations("read:profile")
+    assert len(scope_mutations) >= 3
+
+
+def test_full_orchestration_cycle():
     """Executes the full adversarial attack -> patch -> dual-gate loop end-to-end."""
     workspace_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     orchestrator = AegisOrchestrator(workspace_root=workspace_dir)
 
-    final_state = orchestrator.run_all(max_rounds=10)
+    final_state = orchestrator.run_all(max_rounds=15)
 
     # Assert that all attack vectors converged to remediated status
     assert final_state.is_converged is True
+    assert final_state.is_soundly_converged is True
+    assert len(final_state.unresolved_vectors) == 0
     assert len(final_state.remediated_vectors) == len(final_state.active_vector_ids)
 
     # Assert that all round results achieved clean verification

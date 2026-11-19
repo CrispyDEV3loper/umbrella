@@ -1,7 +1,7 @@
 """
 Aegis Core Orchestrator.
-Manages the cyclic state machine between Red Agent, Blue Agent,
-and the Dual-Gate Evaluator until system convergence.
+Manages the cyclic state machine between Red Agent (Adaptive Planner),
+Blue Agent (AST-Guided Patcher), and the Dual-Gate Evaluator until sound convergence.
 """
 
 import sys
@@ -38,6 +38,7 @@ class AegisOrchestrator:
             active_vector_ids=list(DEFAULT_VECTORS),
             pending_vectors=list(DEFAULT_VECTORS),
             remediated_vectors=[],
+            unresolved_vectors=[],
             history=[],
         )
 
@@ -48,24 +49,29 @@ class AegisOrchestrator:
             importlib.reload(testbed_app)
         return TestClient(testbed_app.app, base_url=self.base_url)
 
-    def run_all(self, max_rounds: int = 10) -> AegisState:
+    def run_all(self, max_rounds: int = 15) -> AegisState:
         """Executes the co-evolutionary loop across all attack vectors until convergence."""
-        self.on_event("SESSION_START", {"vectors": self.state.pending_vectors})
+        self.on_event("SESSION_START", {"vectors": list(self.state.pending_vectors)})
 
         round_num = 0
         while self.state.pending_vectors and round_num < max_rounds:
             round_num += 1
-            vector_id = self.state.pending_vectors.pop(0)
             self.state.total_rounds = round_num
+
+            # --- 1. Adaptive Red Attack Planning ---
+            vector_id = self.red_agent.plan_next_attack(self.state)
+            if not vector_id:
+                break
+            self.state.pending_vectors.remove(vector_id)
 
             self.on_event("ROUND_START", {"round": round_num, "vector_id": vector_id})
 
-            # --- 1. Red Agent Turn ---
+            # --- 2. Red Agent Execution with Mutation Suite ---
             with self._get_client() as client:
                 proof = self.red_agent.execute_vector(vector_id, client)
 
             if proof is None:
-                # App was already resilient against this vector
+                # Target app was already resilient against this vector and its mutations
                 self.on_event("VECTOR_SECURE", {"vector_id": vector_id})
                 self.state.remediated_vectors.append(vector_id)
                 self.state.history.append(
@@ -83,7 +89,7 @@ class AegisOrchestrator:
             self.state.current_proof = proof
             self.on_event("VULNERABILITY_FOUND", {"proof": proof})
 
-            # --- 2. Blue Agent Turn ---
+            # --- 3. Blue Agent AST Remediation Turn ---
             attempts = 0
             vector_resolved = False
 
@@ -98,7 +104,7 @@ class AegisOrchestrator:
 
                 self.on_event("PATCH_APPLIED", {"patch": patch})
 
-                # --- 3. Dual-Gate Adjudication ---
+                # --- 4. Dual-Gate Adjudication (PoC+ Mutations + Golden Path) ---
                 with self._get_client() as client:
                     gate_result = self.evaluator.evaluate(vector_id, client)
 
@@ -125,6 +131,8 @@ class AegisOrchestrator:
                     self.on_event("PATCH_REJECTED", {"vector_id": vector_id, "gate_result": gate_result})
 
             if not vector_resolved:
+                # Record unresolved finding
+                self.state.unresolved_vectors.append(vector_id)
                 self.state.history.append(
                     RoundHistory(
                         round_number=round_num,
@@ -136,6 +144,8 @@ class AegisOrchestrator:
                 )
                 self.on_event("VECTOR_UNRESOLVED", {"vector_id": vector_id})
 
-        self.state.is_converged = len(self.state.pending_vectors) == 0
+        # Rigorous Convergence Condition:
+        # Must have zero unresolved vectors AND all active vectors must be remediated
+        self.state.is_converged = self.state.is_soundly_converged
         self.on_event("SESSION_COMPLETE", {"state": self.state})
         return self.state
