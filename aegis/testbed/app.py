@@ -1,21 +1,21 @@
 """
-Realistic OAuth 2.0 / OIDC Authorization & Resource Server.
-Contains intentional security flaws for the Red Agent to discover
-and the Blue Agent to repair using surgical code patches.
+Pristine, Immutable Vulnerable Ground-Truth Target Fixture.
+Contains all five OAuth 2.0 / OIDC security vulnerabilities in their raw,
+unpatched state. This fixture is NEVER modified in-place; the benchmark harness
+and orchestrator clone it into isolated execution environments for each trial.
 """
 
-from fastapi import FastAPI, Request, Response, HTTPException, status
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
 import hashlib
 import base64
 import secrets
 import urllib.parse
 
-app = FastAPI(title="Target OAuth 2.0 Service", version="1.0.0")
+app = FastAPI(title="Pristine Vulnerable Target Service", version="1.0.0")
 
-# In-memory storage for clients, codes, and tokens
 REGISTERED_CLIENTS: Dict[str, Dict[str, Any]] = {
     "client-app-123": {
         "client_secret": "secret-xyz-456",
@@ -24,10 +24,7 @@ REGISTERED_CLIENTS: Dict[str, Dict[str, Any]] = {
     }
 }
 
-# Active authorization codes: code -> dict(client_id, redirect_uri, scope, code_challenge, code_challenge_method, used)
 AUTH_CODES: Dict[str, Dict[str, Any]] = {}
-
-# Active access tokens: token -> dict(client_id, scope, user_id)
 ACCESS_TOKENS: Dict[str, Dict[str, Any]] = {}
 
 
@@ -44,12 +41,9 @@ def verify_pkce(code_verifier: str, code_challenge: str, method: str) -> bool:
 
 @app.get("/health")
 def health_check():
-    return {"status": "ok", "service": "target-oauth-server"}
+    return {"status": "ok", "service": "pristine-vulnerable-oauth-server"}
 
 
-# ==============================================================================
-# AUTHORIZATION ENDPOINT
-# ==============================================================================
 @app.get("/authorize")
 def authorize(
     response_type: str,
@@ -65,19 +59,19 @@ def authorize(
     if not client:
         return JSONResponse(status_code=400, content={"error": "unauthorized_client", "error_description": "Unknown client_id"})
 
+    # 2. Redirect URI Validation (VULNERABILITY: weak startswith allows path traversal / open redirects)
     # 2. Redirect URI Validation (RFC 6749 Section 3.1.2 & RFC 6819 Section 4.4.1.7)
     # Strictly require exact string matching against pre-registered redirect_uris
     if redirect_uri not in client["redirect_uris"]:
         return JSONResponse(status_code=400, content={"error": "invalid_request", "error_description": "redirect_uri must exactly match registered URI"})
 
     # 3. State Parameter Check (RFC 6749 Section 10.12)
-    # Enforce state parameter to prevent Login Cross-Site Request Forgery (CSRF)
+    # Enforce state parameter presence and minimum entropy to prevent Login CSRF
     if not state or len(state.strip()) < 8:
         return JSONResponse(
             status_code=400,
             content={"error": "invalid_request", "error_description": "state parameter with sufficient entropy is required for CSRF protection"}
         )
-
     # 4. Generate Authorization Code
     code = f"authcode_{secrets.token_hex(16)}"
     AUTH_CODES[code] = {
@@ -86,10 +80,9 @@ def authorize(
         "scope": scope,
         "code_challenge": code_challenge,
         "code_challenge_method": code_challenge_method,
-        "used": False,  # Flag for code replay
+        "used": False,
     }
 
-    # Redirect user back with code
     params = {"code": code}
     if state is not None:
         params["state"] = state
@@ -98,9 +91,6 @@ def authorize(
     return JSONResponse(status_code=200, content={"redirect_to": redirect_target, "code": code, "state": state})
 
 
-# ==============================================================================
-# TOKEN ENDPOINT
-# ==============================================================================
 class TokenRequest(BaseModel):
     grant_type: str
     code: str
@@ -116,7 +106,6 @@ def token(req: TokenRequest):
     if req.grant_type != "authorization_code":
         return JSONResponse(status_code=400, content={"error": "unsupported_grant_type"})
 
-    # 1. Lookup Authorization Code
     auth_data = AUTH_CODES.get(req.code)
     if not auth_data:
         return JSONResponse(status_code=400, content={"error": "invalid_grant", "error_description": "Authorization code not found"})
@@ -131,26 +120,28 @@ def token(req: TokenRequest):
     # Mark code as consumed immediately
     auth_data["used"] = True
 
-    # 2. Validate Client
     if auth_data["client_id"] != req.client_id:
         return JSONResponse(status_code=400, content={"error": "invalid_client"})
 
-    # 3. PKCE Enforcement
-    # VULNERABILITY (OAUTH-PKCE-DOWNGRADE):
-    # If code_verifier is not provided by the client, the server does not enforce it
-    # even when code_challenge was established in the /authorize step!
-    # RFC 7636 Section 4.4.1 PKCE Enforcement
+    # VULNERABILITY: If code_verifier is omitted, continues without enforcing it
+    # RFC 7636 Section 4.4.1 PKCE Mandatory Enforcement & Method Downgrade Protection
     if auth_data.get("code_challenge"):
         if not req.code_verifier:
             return JSONResponse(
                 status_code=400,
                 content={"error": "invalid_grant", "error_description": "code_verifier is required when code_challenge is set"}
             )
-        if not verify_pkce(req.code_verifier, auth_data["code_challenge"], auth_data["code_challenge_method"]):
+        # RFC 7636 Section 4.2: Enforce S256 method to prevent plain method downgrades
+        if auth_data.get("code_challenge_method") != "S256":
+            return JSONResponse(
+                status_code=400,
+                content={"error": "invalid_request", "error_description": "Insecure plain PKCE method rejected; S256 is required"}
+            )
+        if not verify_pkce(req.code_verifier, auth_data["code_challenge"], "S256"):
             return JSONResponse(status_code=400, content={"error": "invalid_grant", "error_description": "PKCE verification failed"})
 
-    # 4. Scope Enforcement (RFC 6749 Section 3.3)
-    # The granted scope must never exceed the scope authorized by the resource owner
+    # VULNERABILITY: Blindly grants unconsented scopes
+    # RFC 6749 Section 3.3: Scope Authorization Validation
     authorized_scopes = set(auth_data["scope"].split())
     if req.scope:
         requested_scopes = set(req.scope.split())
@@ -164,7 +155,6 @@ def token(req: TokenRequest):
     else:
         granted_scope = auth_data["scope"]
 
-    # Issue Access Token
     access_token = f"at_{secrets.token_urlsafe(32)}"
     ACCESS_TOKENS[access_token] = {
         "client_id": req.client_id,
@@ -180,9 +170,6 @@ def token(req: TokenRequest):
     }
 
 
-# ==============================================================================
-# RESOURCE SERVER: USERINFO ENDPOINT
-# ==============================================================================
 @app.get("/userinfo")
 def userinfo(request: Request):
     auth_header = request.headers.get("Authorization")

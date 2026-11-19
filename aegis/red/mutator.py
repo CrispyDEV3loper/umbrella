@@ -70,9 +70,11 @@ class OAuthPayloadMutator:
                 "description": "Mismatched code_verifier string",
             },
             {
-                "type": "METHOD_TAMPERING",
-                "verifier": "plain_challenge_tamper_attempt",
-                "description": "Attempting to force plain method downgrade verification",
+                "type": "PLAIN_METHOD_DOWNGRADE",
+                "verifier": "plain_shared_secret_verifier",
+                "challenge": "plain_shared_secret_verifier",
+                "method": "plain",
+                "description": "Attempting plain method downgrade (RFC 7636 Section 4.2 recommends rejecting plain in favor of S256)",
             },
         ]
 

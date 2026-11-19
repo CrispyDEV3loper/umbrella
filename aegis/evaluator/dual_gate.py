@@ -25,18 +25,28 @@ class DualGateEvaluator:
         Gate 1: PoC+ Mutation Exploit Verification (All mutation variants must be neutralized).
         Gate 2: Functional Contract Suite (All Golden Path user journeys must pass 100%).
         """
+        MUTATION_COUNTS = {
+            "OAUTH-REDIRECT-TRAVERSAL": 5,
+            "OAUTH-PKCE-DOWNGRADE": 4,
+            "OAUTH-STATE-CSRF": 3,
+            "OAUTH-SCOPE-ESCALATION": 4,
+            "OAUTH-CODE-REPLAY": 1,
+        }
+
         # --- Gate 1: Security PoC+ Mutation Verification ---
         re_exploit_proof = self.red_agent.execute_vector(vector_id, client)
+        total_mutations = MUTATION_COUNTS.get(vector_id, 1)
+
         if re_exploit_proof is None:
             security_passed = True
-            sec_output = f"Security Gate PASSED: Attack vector {vector_id} and all mutation variants successfully neutralized."
-            mut_tested = 5
-            mut_blocked = 5
+            sec_output = f"Security Gate PASSED: Attack vector {vector_id} and all {total_mutations} mutation variants successfully neutralized."
+            mut_tested = total_mutations
+            mut_blocked = total_mutations
         else:
             security_passed = False
-            mut_tested = re_exploit_proof.mutations_tested
-            mut_blocked = mut_tested - re_exploit_proof.mutations_succeeded
-            sec_output = f"Security Gate FAILED: Target remains vulnerable to bypass mutations. Exploit: {re_exploit_proof.poc_summary}"
+            mut_tested = total_mutations
+            mut_blocked = total_mutations - re_exploit_proof.mutations_succeeded
+            sec_output = f"Security Gate FAILED: Target remains vulnerable to bypass mutations ({mut_blocked}/{mut_tested} neutralized). Exploit: {re_exploit_proof.poc_summary}"
 
         # --- Gate 2: Functional Preservation (Golden Path) ---
         func_passed, func_output = GoldenPathSuite.run_all(client, self.base_url)

@@ -13,14 +13,18 @@ class AgentComputerInterface:
     """Provides safe code inspection and modification tools for the Blue Agent."""
 
     def __init__(self, workspace_root: str):
-        self.workspace_root = os.path.abspath(workspace_root)
+        self.workspace_root = os.path.realpath(workspace_root)
         self._backup_cache = {}
 
     def _resolve_path(self, relative_path: str) -> str:
-        """Resolves path and enforces strict workspace containment to prevent directory traversal."""
-        resolved = os.path.abspath(os.path.join(self.workspace_root, relative_path))
-        # Use commonpath to prevent sibling directory prefix bypasses (e.g. /app vs /app-leak)
-        if os.path.commonpath([resolved, self.workspace_root]) != self.workspace_root:
+        """
+        Resolves path and resolves filesystem symlinks (realpath) to enforce strict
+        workspace containment and prevent symlink-based escape attacks.
+        """
+        resolved = os.path.realpath(os.path.join(self.workspace_root, relative_path))
+        real_root = os.path.realpath(self.workspace_root)
+        # Use commonpath on realpath-resolved paths to ensure complete containment
+        if os.path.commonpath([resolved, real_root]) != real_root:
             raise PermissionError(f"Access denied outside workspace root: {relative_path}")
         return resolved
 

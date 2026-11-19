@@ -37,6 +37,8 @@ class OAuthAttackProbes:
         succeeded_mutations = []
 
         for mut in mutations:
+            req_challenge = mut.get("challenge", challenge)
+            req_method = mut.get("method", "S256")
             auth_resp = client.get(
                 f"{base_url}/authorize",
                 params={
@@ -45,8 +47,8 @@ class OAuthAttackProbes:
                     "redirect_uri": "https://my-saas-app.com/callback",
                     "scope": "read:profile",
                     "state": "anti_csrf_xyz",
-                    "code_challenge": challenge,
-                    "code_challenge_method": "S256",
+                    "code_challenge": req_challenge,
+                    "code_challenge_method": req_method,
                 },
             )
             if auth_resp.status_code != 200:
