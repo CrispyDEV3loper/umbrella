@@ -1,6 +1,6 @@
 """
 Aegis Red Team Protocol Probes.
-Adapted from OAuthVulnerabilityScanner active testing mechanics
+Active testing engine for OAuth 2.0 and OpenID Connect security specifications
 (RFC 8414, RFC 7636, RFC 6749, RFC 6819).
 Each probe attempts to exploit a specific OAuth misconfiguration.
 """

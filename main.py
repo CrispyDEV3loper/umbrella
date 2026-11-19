@@ -53,7 +53,7 @@ def handle_event(event_type: str, data: dict):
         print(f"        PoC Summary: {proof.poc_summary}")
 
     elif event_type == "REPAIR_ATTEMPT":
-        print(f"    [*] Blue Agent (SWE-agent ACI) initiating repair attempt #{data['attempt']}...")
+        print(f"    [*] Blue Agent (Remediation ACI) initiating repair attempt #{data['attempt']}...")
 
     elif event_type == "PATCH_APPLIED":
         patch = data["patch"]

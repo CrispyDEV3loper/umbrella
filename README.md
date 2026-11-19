@@ -1,6 +1,6 @@
 # OAuth-Aegis: 2-Sided AI OAuth & 3rd-Party Integration Testing & Repair Framework
 
-A co-evolutionary adversarial security system that combines **SWE-agent**, **OAuthVulnerabilityScanner**, and **LangGraph** concepts into an iterative attack, patch, and functional verification loop.
+An autonomous, co-evolutionary adversarial security system uniting active protocol vulnerability probing, Agent-Computer Interface (ACI) code repair, and a cyclic dual-gate adjudication loop.
 
 ---
 
@@ -8,7 +8,7 @@ A co-evolutionary adversarial security system that combines **SWE-agent**, **OAu
 
 Standard penetration testing tools only find vulnerabilities; developers still have to manually patch them and hope they haven't broken existing user authentication. **OAuth-Aegis** bridges this gap:
 1. **Red Side (Attacker):** Executes protocol-level OAuth 2.0 / OIDC attack probes (PKCE downgrades, redirect URI traversal, state CSRF omissions, authorization code replaying, scope escalations).
-2. **Blue Side (Patcher):** Uses an Agent-Computer Interface (ACI modeled on SWE-agent) to inspect the codebase, locate the vulnerability, and generate minimal surgical patches.
+2. **Blue Side (Patcher):** Uses an Agent-Computer Interface (ACI) to inspect the codebase, locate the vulnerability, and generate minimal surgical patches.
 3. **Dual-Gate Evaluator (Judge):** Rigorously checks that:
    - **Gate 1 (Security):** The exploit is completely blocked and rejected.
    - **Gate 2 (Functionality):** All standard "Golden Path" OAuth user journeys (PKCE exchange, token issuance, userinfo queries) pass 100% without regression.
@@ -16,16 +16,16 @@ Standard penetration testing tools only find vulnerabilities; developers still h
 
 ---
 
-## Architecture & Combined Components
+## Architecture & System Workflow
 
 ```
                               ┌──────────────────────────────────────────────┐
-                              │               LangGraph State                │
+                              │            Adversarial State Graph           │
                               └──────────────────────┬───────────────────────┘
                                                      │
                                                      ▼
      ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-     │ 1. Red Agent (OAuthVulnerabilityScanner Probes)                                                  │
+     │ 1. Red Agent (Protocol Attack Probes)                                                            │
      │    - OAUTH-PKCE-DOWNGRADE       (RFC 7636 bypass)                                                │
      │    - OAUTH-REDIRECT-TRAVERSAL   (RFC 6749 Section 3.1.2 path traversal)                          │
      │    - OAUTH-STATE-CSRF           (RFC 6749 Section 10.12 omission)                                │
@@ -35,7 +35,7 @@ Standard penetration testing tools only find vulnerabilities; developers still h
                                                      │
                                                      ▼ (Exploit Confirmed)
      ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-     │ 2. Blue Agent (SWE-agent ACI & Program Repair)                                                   │
+     │ 2. Blue Agent (Remediation ACI & Program Repair)                                                 │
      │    - Localizes fault in target server routes                                                     │
      │    - Generates minimal surgical RFC-compliant code patch                                         │
      │    - Applies diff via Agent-Computer Interface (with automatic rollback support)                 │
@@ -63,10 +63,10 @@ aegis/
 │   ├── config.py             # OAuth threat matrix & operational parameters
 │   └── orchestrator.py       # Multi-round cyclic game loop controller
 ├── red/
-│   ├── probes.py             # Active protocol probes from OAuthVulnerabilityScanner
+│   ├── probes.py             # Active protocol security probes
 │   └── agent.py              # Red Team strategy planner
 ├── blue/
-│   ├── aci.py                # SWE-agent inspired Agent-Computer Interface
+│   ├── aci.py                # Agent-Computer Interface for code inspection and repair
 │   └── agent.py              # Blue Team patch generator and applicator
 ├── evaluator/
 │   ├── golden_path.py        # Functional contract test suite (happy path)

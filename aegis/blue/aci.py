@@ -1,7 +1,7 @@
 """
 Aegis Blue Team Agent-Computer Interface (ACI).
-Modeled on SWE-agent's ACI primitives for localized repository
-exploration, diff generation, block replacement, and rollback.
+Provides localized repository exploration, AST-level diff inspection,
+surgical block replacement, and automated rollback capabilities.
 """
 
 import os

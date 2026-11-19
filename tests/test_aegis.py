@@ -32,7 +32,7 @@ def test_initial_golden_path(test_client):
 
 
 def test_aci_view_and_replace(tmp_path):
-    """Tests SWE-agent inspired ACI primitives for safe code editing and rollback."""
+    """Tests ACI primitives for safe code editing and rollback."""
     test_file = tmp_path / "sample.py"
     test_file.write_text("def hello():\n    return 'vulnerable'\n")
 

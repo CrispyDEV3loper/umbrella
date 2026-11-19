@@ -1,8 +1,8 @@
 """
 Aegis Blue Team Agent (Patcher).
-Combines SWE-agent ACI with OAuth RFC standards to generate
-surgical code patches that neutralize exploits while preserving
-valid functional behaviors.
+Coordinates localized code inspection and RFC standard analysis to generate
+surgical code patches that neutralize exploits while strictly preserving
+valid functional behaviors and API contracts.
 """
 
 from typing import Optional, Dict, Any, Tuple

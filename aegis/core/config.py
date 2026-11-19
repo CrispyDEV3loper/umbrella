@@ -1,7 +1,7 @@
 """
 Aegis Core Configuration and Threat Matrix.
 Defines the standard OAuth 2.0 / OIDC attack vectors derived from
-RFC 6749, RFC 7636, RFC 6819, RFC 9207, and OAuthVulnerabilityScanner.
+RFC 6749, RFC 7636, RFC 6819, RFC 9207, and OAuth Security Best Current Practices.
 """
 
 from typing import Dict, Any, List
