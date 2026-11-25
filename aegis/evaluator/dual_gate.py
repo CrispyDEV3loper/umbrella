@@ -10,14 +10,16 @@ import httpx
 from aegis.core.state import VulnerabilityProof, DualGateResult
 from aegis.red.agent import RedAgent
 from aegis.evaluator.golden_path import GoldenPathSuite
+from aegis.core.target import TargetProfile
 
 
 class DualGateEvaluator:
     """Enforces the Dual-Gate Verification Criterion."""
 
-    def __init__(self, base_url: str):
+    def __init__(self, base_url: str, profile: Optional[TargetProfile] = None):
         self.base_url = base_url
-        self.red_agent = RedAgent(base_url)
+        self.profile = profile
+        self.red_agent = RedAgent(base_url, profile)
 
     def evaluate(self, vector_id: str, client: httpx.Client) -> DualGateResult:
         """
@@ -49,7 +51,7 @@ class DualGateEvaluator:
             sec_output = f"Security Gate FAILED: Target remains vulnerable to bypass mutations ({mut_blocked}/{mut_tested} neutralized). Exploit: {re_exploit_proof.poc_summary}"
 
         # --- Gate 2: Functional Preservation (Golden Path) ---
-        func_passed, func_output = GoldenPathSuite.run_all(client, self.base_url)
+        func_passed, func_output = GoldenPathSuite.run_all(client, self.base_url, self.profile)
 
         return DualGateResult(
             security_check_passed=security_passed,

@@ -5,11 +5,13 @@ Used by the Dual-Gate Evaluator to ensure that security patches
 do not break legitimate client functionality or integration flows.
 """
 
-from typing import Tuple, Dict, Any
+from typing import Tuple, Dict, Any, Optional
 import httpx
 import secrets
 import hashlib
 import base64
+
+from aegis.core.target import TargetProfile, LEGACY_CLIENT_ID, LEGACY_REDIRECT_URI, LEGACY_SCOPE
 
 
 def generate_pkce() -> Tuple[str, str]:
@@ -23,38 +25,51 @@ class GoldenPathSuite:
     """Verifies that legitimate OAuth flows continue to function without regression."""
 
     @staticmethod
-    def run_all(client: httpx.Client, base_url: str) -> Tuple[bool, str]:
+    def _identities(profile: Optional[TargetProfile]):
+        return (
+            profile.client_id if profile else LEGACY_CLIENT_ID,
+            profile.redirect_uri if profile else LEGACY_REDIRECT_URI,
+            profile.scope if profile else LEGACY_SCOPE,
+        )
+
+    @staticmethod
+    def run_all(client: httpx.Client, base_url: str, profile: Optional[TargetProfile] = None) -> Tuple[bool, str]:
         """
         Runs the full functional regression suite.
         Returns: (all_passed: bool, message: str)
         """
         # Test 1: Standard Authorization Code Flow with PKCE & State
-        flow_ok, msg = GoldenPathSuite.verify_standard_pkce_flow(client, base_url)
+        flow_ok, msg = GoldenPathSuite.verify_standard_pkce_flow(client, base_url, profile)
         if not flow_ok:
             return False, f"Regression in Standard PKCE Flow: {msg}"
 
-        # Test 2: UserInfo Resource Access with Valid Token
-        userinfo_ok, msg = GoldenPathSuite.verify_userinfo_access(client, base_url)
-        if not userinfo_ok:
-            return False, f"Regression in UserInfo Endpoint: {msg}"
+        # Test 2: UserInfo Resource Access with Valid Token (only if target exposes /userinfo)
+        has_userinfo = True
+        if profile is not None:
+            has_userinfo = any(r.get("route_path") == "/userinfo" for r in profile.discovered_routes)
+        if has_userinfo:
+            userinfo_ok, msg = GoldenPathSuite.verify_userinfo_access(client, base_url, profile)
+            if not userinfo_ok:
+                return False, f"Regression in UserInfo Endpoint: {msg}"
 
         return True, "All Golden Path functional flows passed successfully (100% functional integrity)."
 
     @staticmethod
-    def verify_standard_pkce_flow(client: httpx.Client, base_url: str) -> Tuple[bool, str]:
+    def verify_standard_pkce_flow(client: httpx.Client, base_url: str,
+                                  profile: Optional[TargetProfile] = None) -> Tuple[bool, str]:
         """Legitimate end-to-end OAuth 2.0 code exchange with PKCE."""
         verifier, challenge = generate_pkce()
+        client_id, redirect_uri, scope = GoldenPathSuite._identities(profile)
         state = f"valid_client_state_{secrets.token_hex(8)}"
-        redirect_uri = "https://my-saas-app.com/callback"
 
         # 1. Authorize
         auth_resp = client.get(
             f"{base_url}/authorize",
             params={
                 "response_type": "code",
-                "client_id": "client-app-123",
+                "client_id": client_id,
                 "redirect_uri": redirect_uri,
-                "scope": "read:profile",
+                "scope": scope,
                 "state": state,
                 "code_challenge": challenge,
                 "code_challenge_method": "S256",
@@ -79,7 +94,7 @@ class GoldenPathSuite:
                 "grant_type": "authorization_code",
                 "code": code,
                 "redirect_uri": redirect_uri,
-                "client_id": "client-app-123",
+                "client_id": client_id,
                 "code_verifier": verifier,
             },
         )
@@ -93,16 +108,18 @@ class GoldenPathSuite:
         return True, "Standard PKCE flow succeeded"
 
     @staticmethod
-    def verify_userinfo_access(client: httpx.Client, base_url: str) -> Tuple[bool, str]:
+    def verify_userinfo_access(client: httpx.Client, base_url: str,
+                              profile: Optional[TargetProfile] = None) -> Tuple[bool, str]:
         """Verify that issued access token accesses protected user profile."""
         verifier, challenge = generate_pkce()
+        client_id, redirect_uri, scope = GoldenPathSuite._identities(profile)
         auth_resp = client.get(
             f"{base_url}/authorize",
             params={
                 "response_type": "code",
-                "client_id": "client-app-123",
-                "redirect_uri": "https://my-saas-app.com/callback",
-                "scope": "read:profile",
+                "client_id": client_id,
+                "redirect_uri": redirect_uri,
+                "scope": scope,
                 "state": "state_valid_userinfo_99",
                 "code_challenge": challenge,
                 "code_challenge_method": "S256",
@@ -115,8 +132,8 @@ class GoldenPathSuite:
             json={
                 "grant_type": "authorization_code",
                 "code": code,
-                "redirect_uri": "https://my-saas-app.com/callback",
-                "client_id": "client-app-123",
+                "redirect_uri": redirect_uri,
+                "client_id": client_id,
                 "code_verifier": verifier,
             },
         )
@@ -129,8 +146,10 @@ class GoldenPathSuite:
         if userinfo_resp.status_code != 200:
             return False, f"Protected /userinfo returned {userinfo_resp.status_code}"
 
-        user_data = userinfo_resp.json()
-        if user_data.get("email") != "jane@example.com":
-            return False, "UserInfo response corrupted or invalid"
+        # Legacy testbed asserts the fixture's exact user; custom targets only need a 200.
+        if profile is None:
+            user_data = userinfo_resp.json()
+            if user_data.get("email") != "jane@example.com":
+                return False, "UserInfo response corrupted or invalid"
 
         return True, "UserInfo verified"

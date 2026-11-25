@@ -1,0 +1,1916 @@
+{
+  "session_id": "umbrella-1795550901",
+  "started_at": "2026-11-24T20:08:21.573207+00:00",
+  "completed_at": "2026-11-24T20:08:21.764475+00:00",
+  "workspace_root": "D:\\capstone saas",
+  "host_metadata": {
+    "all_passed": true,
+    "checks": [
+      {
+        "name": "Python Runtime Version",
+        "status": "PASS",
+        "message": "Compatible Python runtime detected: 3.11.9",
+        "details": {
+          "version": "3.11.9"
+        }
+      },
+      {
+        "name": "Workspace Filesystem Permissions",
+        "status": "PASS",
+        "message": "Read, write, and delete permissions confirmed on workspace.",
+        "details": {
+          "path": "D:\\capstone saas"
+        }
+      },
+      {
+        "name": "Target AST Syntax Parseability",
+        "status": "PASS",
+        "message": "Source successfully parsed into valid AST (750 nodes analyzed).",
+        "details": {
+          "file": "aegis/testbed/app.py",
+          "ast_nodes": 750
+        }
+      },
+      {
+        "name": "AST Route Handler Discovery",
+        "status": "PASS",
+        "message": "All 3 core OAuth endpoints discovered (/health, /authorize, /token, /userinfo).",
+        "details": {
+          "discovered": [
+            "/health",
+            "/authorize",
+            "/token",
+            "/userinfo"
+          ],
+          "handler_count": 4
+        }
+      },
+      {
+        "name": "Baseline Functional Contract (Golden Path)",
+        "status": "PASS",
+        "message": "Legitimate authentication and token flow verified operational.",
+        "details": {
+          "message": "All Golden Path functional flows passed successfully (100% functional integrity)."
+        }
+      }
+    ],
+    "host_info": {
+      "os_name": "Windows",
+      "os_release": "10",
+      "os_version": "10.0.26200",
+      "architecture": "AMD64",
+      "python_version": "3.11.9",
+      "python_executable": "C:\\Users\\HP\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "cwd": "D:\\capstone saas",
+      "workspace_root": "D:\\capstone saas"
+    },
+    "discovered_routes": [
+      {
+        "name": "health_check",
+        "route_path": "/health",
+        "method": "get",
+        "lineno": 45,
+        "arguments": []
+      },
+      {
+        "name": "authorize",
+        "route_path": "/authorize",
+        "method": "get",
+        "lineno": 50,
+        "arguments": [
+          "response_type",
+          "client_id",
+          "redirect_uri",
+          "scope",
+          "state",
+          "code_challenge",
+          "code_challenge_method"
+        ]
+      },
+      {
+        "name": "token",
+        "route_path": "/token",
+        "method": "post",
+        "lineno": 102,
+        "arguments": [
+          "req"
+        ]
+      },
+      {
+        "name": "userinfo",
+        "route_path": "/userinfo",
+        "method": "get",
+        "lineno": 143,
+        "arguments": [
+          "request"
+        ]
+      }
+    ]
+  },
+  "initial_vectors": [
+    "OAUTH-PKCE-DOWNGRADE",
+    "OAUTH-REDIRECT-TRAVERSAL",
+    "OAUTH-STATE-CSRF",
+    "OAUTH-CODE-REPLAY",
+    "OAUTH-SCOPE-ESCALATION"
+  ],
+  "steps": [
+    {
+      "step_id": 1,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.574206+00:00",
+      "event_type": "SESSION_START",
+      "vector_id": null,
+      "data": {
+        "vectors": [
+          "OAUTH-PKCE-DOWNGRADE",
+          "OAUTH-REDIRECT-TRAVERSAL",
+          "OAUTH-STATE-CSRF",
+          "OAUTH-CODE-REPLAY",
+          "OAUTH-SCOPE-ESCALATION"
+        ]
+      }
+    },
+    {
+      "step_id": 2,
+      "round_number": 1,
+      "timestamp": "2026-11-24T20:08:21.574206+00:00",
+      "event_type": "ROUND_START",
+      "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+      "data": {
+        "round": 1,
+        "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+        "decision": {
+          "selected_vector": "OAUTH-REDIRECT-TRAVERSAL",
+          "total_score": 100,
+          "base_score": 100,
+          "boost": 0,
+          "boost_reason": "Base severity score",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+              "total_score": 100,
+              "base_score": 100,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-CODE-REPLAY",
+              "total_score": 100,
+              "base_score": 100,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-PKCE-DOWNGRADE",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": null
+        }
+      }
+    },
+    {
+      "step_id": 3,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.587263+00:00",
+      "event_type": "VULNERABILITY_FOUND",
+      "vector_id": null,
+      "data": {
+        "proof": {
+          "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+          "category": "REDIRECT_URI",
+          "description": "Authorization endpoint accepted path-traversal or manipulated redirect_uri bypassing whitelist.",
+          "exploit_payload": {
+            "mutation_type": "PLAIN_TRAVERSAL",
+            "description": "Standard directory traversal via /../../",
+            "uri": "https://acme-saas.example.com/oauth/redirect/../../attacker_leak",
+            "status": 200,
+            "body": {
+              "redirect_to": "https://acme-saas.example.com/oauth/redirect/../../attacker_leak?code=acm_4381f5481f5db8afbc7fc7b4b16e36ff&state=umb_685a84f9f9c387db",
+              "code": "acm_4381f5481f5db8afbc7fc7b4b16e36ff",
+              "state": "umb_685a84f9f9c387db"
+            }
+          },
+          "target_endpoint": "/authorize",
+          "response_status": 200,
+          "response_body": {
+            "redirect_to": "https://acme-saas.example.com/oauth/redirect/../../attacker_leak?code=acm_4381f5481f5db8afbc7fc7b4b16e36ff&state=umb_685a84f9f9c387db",
+            "code": "acm_4381f5481f5db8afbc7fc7b4b16e36ff",
+            "state": "umb_685a84f9f9c387db"
+          },
+          "poc_summary": "Redirect URI bypass succeeded on 4/5 variants. Trigger: Standard directory traversal via /../../ (https://acme-saas.example.com/oauth/redirect/../../attacker_leak)",
+          "mutations_tested": 5,
+          "mutations_succeeded": 4,
+          "mutation_details": []
+        },
+        "decision": {
+          "selected_vector": "OAUTH-REDIRECT-TRAVERSAL",
+          "total_score": 100,
+          "base_score": 100,
+          "boost": 0,
+          "boost_reason": "Base severity score",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+              "total_score": 100,
+              "base_score": 100,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-CODE-REPLAY",
+              "total_score": 100,
+              "base_score": 100,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-PKCE-DOWNGRADE",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": null
+        }
+      }
+    },
+    {
+      "step_id": 4,
+      "round_number": 1,
+      "timestamp": "2026-11-24T20:08:21.587263+00:00",
+      "event_type": "REPAIR_ATTEMPT",
+      "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+      "data": {
+        "round": 1,
+        "attempt": 1,
+        "vector_id": "OAUTH-REDIRECT-TRAVERSAL"
+      }
+    },
+    {
+      "step_id": 5,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.591247+00:00",
+      "event_type": "PATCH_APPLIED",
+      "vector_id": null,
+      "data": {
+        "patch": {
+          "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+          "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,4 @@\n-    valid_redirect = any(redirect_uri.startswith(reg_uri) for reg_uri in client[\"redirect_uris\"])\n-    if not valid_redirect:\n-        return JSONResponse(status_code=400, content={\"error\": \"invalid_request\", \"error_description\": \"Invalid redirect_uri\"})\n+    # 2. Redirect URI Validation (RFC 6749 Section 3.1.2 & RFC 6819 Section 4.4.1.7)\n+    # Strictly require exact string matching against pre-registered redirect_uris\n+    if redirect_uri not in client[\"redirect_uris\"]:\n+        return JSONResponse(status_code=400, content={\"error\": \"invalid_request\", \"error_description\": \"redirect_uri must exactly match registered URI\"})",
+          "target_file": "target_app_under_test.py",
+          "explanation": "Replace weak startswith prefix check with exact URI matching to prevent path traversal and open redirects.",
+          "lines_changed": 4,
+          "ast_validated": true
+        }
+      }
+    },
+    {
+      "step_id": 6,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.608335+00:00",
+      "event_type": "DUAL_GATE_EVALUATED",
+      "vector_id": null,
+      "data": {
+        "result": {
+          "security_check_passed": true,
+          "golden_path_passed": true,
+          "exploit_output": "Security Gate PASSED: Attack vector OAUTH-REDIRECT-TRAVERSAL and all 5 mutation variants successfully neutralized.",
+          "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+          "mutations_tested": 5,
+          "mutations_blocked": 5,
+          "code_quality_passed": true
+        }
+      }
+    },
+    {
+      "step_id": 7,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.608335+00:00",
+      "event_type": "VECTOR_RESOLVED",
+      "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+      "data": {
+        "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+        "patch": {
+          "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+          "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,4 @@\n-    valid_redirect = any(redirect_uri.startswith(reg_uri) for reg_uri in client[\"redirect_uris\"])\n-    if not valid_redirect:\n-        return JSONResponse(status_code=400, content={\"error\": \"invalid_request\", \"error_description\": \"Invalid redirect_uri\"})\n+    # 2. Redirect URI Validation (RFC 6749 Section 3.1.2 & RFC 6819 Section 4.4.1.7)\n+    # Strictly require exact string matching against pre-registered redirect_uris\n+    if redirect_uri not in client[\"redirect_uris\"]:\n+        return JSONResponse(status_code=400, content={\"error\": \"invalid_request\", \"error_description\": \"redirect_uri must exactly match registered URI\"})",
+          "target_file": "target_app_under_test.py",
+          "explanation": "Replace weak startswith prefix check with exact URI matching to prevent path traversal and open redirects.",
+          "lines_changed": 4,
+          "ast_validated": true
+        }
+      }
+    },
+    {
+      "step_id": 8,
+      "round_number": 2,
+      "timestamp": "2026-11-24T20:08:21.609841+00:00",
+      "event_type": "ROUND_START",
+      "vector_id": "OAUTH-CODE-REPLAY",
+      "data": {
+        "round": 2,
+        "vector_id": "OAUTH-CODE-REPLAY",
+        "decision": {
+          "selected_vector": "OAUTH-CODE-REPLAY",
+          "total_score": 100,
+          "base_score": 100,
+          "boost": 0,
+          "boost_reason": "Base severity score",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-CODE-REPLAY",
+              "total_score": 100,
+              "base_score": 100,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 95,
+              "base_score": 75,
+              "boost": 20,
+              "reason": "Endpoint correlation boost (+20) from preceding /authorize compromise"
+            },
+            {
+              "vector_id": "OAUTH-PKCE-DOWNGRADE",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": "/authorize"
+        }
+      }
+    },
+    {
+      "step_id": 9,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.620871+00:00",
+      "event_type": "VULNERABILITY_FOUND",
+      "vector_id": null,
+      "data": {
+        "proof": {
+          "vector_id": "OAUTH-CODE-REPLAY",
+          "category": "REPLAY",
+          "description": "Authorization code was successfully redeemed multiple times for different access tokens.",
+          "exploit_payload": {
+            "replayed_code": "acm_79329ff4962833aefd81d984fd22fa55"
+          },
+          "target_endpoint": "/token",
+          "response_status": 200,
+          "response_body": {
+            "access_token": "at_dHVs2Fs6fm21XxFkduDwrNisSY04NutvQ5hcV0ccvrI",
+            "token_type": "Bearer",
+            "expires_in": 3600,
+            "scope": "read:workspace"
+          },
+          "poc_summary": "Replay of code acm_79329ff4962833aefd81d984fd22fa55 produced second access token: at_dHVs2Fs6fm21XxFkduDwrNisSY04NutvQ5hcV0ccvrI.",
+          "mutations_tested": 1,
+          "mutations_succeeded": 1,
+          "mutation_details": []
+        },
+        "decision": {
+          "selected_vector": "OAUTH-CODE-REPLAY",
+          "total_score": 100,
+          "base_score": 100,
+          "boost": 0,
+          "boost_reason": "Base severity score",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-CODE-REPLAY",
+              "total_score": 100,
+              "base_score": 100,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 95,
+              "base_score": 75,
+              "boost": 20,
+              "reason": "Endpoint correlation boost (+20) from preceding /authorize compromise"
+            },
+            {
+              "vector_id": "OAUTH-PKCE-DOWNGRADE",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": "/authorize"
+        }
+      }
+    },
+    {
+      "step_id": 10,
+      "round_number": 2,
+      "timestamp": "2026-11-24T20:08:21.620871+00:00",
+      "event_type": "REPAIR_ATTEMPT",
+      "vector_id": "OAUTH-CODE-REPLAY",
+      "data": {
+        "round": 2,
+        "attempt": 1,
+        "vector_id": "OAUTH-CODE-REPLAY"
+      }
+    },
+    {
+      "step_id": 11,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.623872+00:00",
+      "event_type": "PATCH_APPLIED",
+      "vector_id": null,
+      "data": {
+        "patch": {
+          "vector_id": "OAUTH-CODE-REPLAY",
+          "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,10 @@\n-    # VULNERABILITY: Code is not marked as used, allowing multi-redemption / replay\n-    # [UNENFORCED IN VULNERABLE BASELINE]\n+    # RFC 6749 Section 4.1.2: One-Time Use Enforcement\n+    if auth_data.get(\"used\", False):\n+        # Invalidate code and reject replay attempt immediately\n+        return JSONResponse(\n+            status_code=400,\n+            content={\"error\": \"invalid_grant\", \"error_description\": \"Authorization code has already been redeemed (replay detected)\"}\n+        )\n+    # Mark code as consumed immediately\n+    auth_data[\"used\"] = True\n ",
+          "target_file": "target_app_under_test.py",
+          "explanation": "Enforce single-use authorization codes by rejecting replay attempts and marking codes as consumed immediately.",
+          "lines_changed": 10,
+          "ast_validated": true
+        }
+      }
+    },
+    {
+      "step_id": 12,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.647542+00:00",
+      "event_type": "DUAL_GATE_EVALUATED",
+      "vector_id": null,
+      "data": {
+        "result": {
+          "security_check_passed": true,
+          "golden_path_passed": true,
+          "exploit_output": "Security Gate PASSED: Attack vector OAUTH-CODE-REPLAY and all 1 mutation variants successfully neutralized.",
+          "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+          "mutations_tested": 1,
+          "mutations_blocked": 1,
+          "code_quality_passed": true
+        }
+      }
+    },
+    {
+      "step_id": 13,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.647542+00:00",
+      "event_type": "VECTOR_RESOLVED",
+      "vector_id": "OAUTH-CODE-REPLAY",
+      "data": {
+        "vector_id": "OAUTH-CODE-REPLAY",
+        "patch": {
+          "vector_id": "OAUTH-CODE-REPLAY",
+          "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,10 @@\n-    # VULNERABILITY: Code is not marked as used, allowing multi-redemption / replay\n-    # [UNENFORCED IN VULNERABLE BASELINE]\n+    # RFC 6749 Section 4.1.2: One-Time Use Enforcement\n+    if auth_data.get(\"used\", False):\n+        # Invalidate code and reject replay attempt immediately\n+        return JSONResponse(\n+            status_code=400,\n+            content={\"error\": \"invalid_grant\", \"error_description\": \"Authorization code has already been redeemed (replay detected)\"}\n+        )\n+    # Mark code as consumed immediately\n+    auth_data[\"used\"] = True\n ",
+          "target_file": "target_app_under_test.py",
+          "explanation": "Enforce single-use authorization codes by rejecting replay attempts and marking codes as consumed immediately.",
+          "lines_changed": 10,
+          "ast_validated": true
+        }
+      }
+    },
+    {
+      "step_id": 14,
+      "round_number": 3,
+      "timestamp": "2026-11-24T20:08:21.647542+00:00",
+      "event_type": "ROUND_START",
+      "vector_id": "OAUTH-PKCE-DOWNGRADE",
+      "data": {
+        "round": 3,
+        "vector_id": "OAUTH-PKCE-DOWNGRADE",
+        "decision": {
+          "selected_vector": "OAUTH-PKCE-DOWNGRADE",
+          "total_score": 95,
+          "base_score": 75,
+          "boost": 20,
+          "boost_reason": "Endpoint correlation boost (+20) from preceding /token compromise",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-PKCE-DOWNGRADE",
+              "total_score": 95,
+              "base_score": 75,
+              "boost": 20,
+              "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+            },
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 95,
+              "base_score": 75,
+              "boost": 20,
+              "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+            },
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": "/token"
+        }
+      }
+    },
+    {
+      "step_id": 15,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.662119+00:00",
+      "event_type": "VULNERABILITY_FOUND",
+      "vector_id": null,
+      "data": {
+        "proof": {
+          "vector_id": "OAUTH-PKCE-DOWNGRADE",
+          "category": "PKCE",
+          "description": "Token endpoint issued access token with missing or invalid PKCE verifier, violating RFC 7636.",
+          "exploit_payload": {
+            "mutation_type": "OMISSION",
+            "description": "Complete omission of code_verifier field",
+            "status": 200,
+            "body": {
+              "access_token": "at_GU41Vttq__azL5GjNjpxpW4V-V38UgccPuAhvwFlEos",
+              "token_type": "Bearer",
+              "expires_in": 3600,
+              "scope": "read:workspace"
+            }
+          },
+          "target_endpoint": "/token",
+          "response_status": 200,
+          "response_body": {
+            "access_token": "at_GU41Vttq__azL5GjNjpxpW4V-V38UgccPuAhvwFlEos",
+            "token_type": "Bearer",
+            "expires_in": 3600,
+            "scope": "read:workspace"
+          },
+          "poc_summary": "PKCE bypass succeeded on 2/4 mutation variants. Primary: Complete omission of code_verifier field",
+          "mutations_tested": 4,
+          "mutations_succeeded": 2,
+          "mutation_details": []
+        },
+        "decision": {
+          "selected_vector": "OAUTH-PKCE-DOWNGRADE",
+          "total_score": 95,
+          "base_score": 75,
+          "boost": 20,
+          "boost_reason": "Endpoint correlation boost (+20) from preceding /token compromise",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-PKCE-DOWNGRADE",
+              "total_score": 95,
+              "base_score": 75,
+              "boost": 20,
+              "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+            },
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 95,
+              "base_score": 75,
+              "boost": 20,
+              "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+            },
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": "/token"
+        }
+      }
+    },
+    {
+      "step_id": 16,
+      "round_number": 3,
+      "timestamp": "2026-11-24T20:08:21.662119+00:00",
+      "event_type": "REPAIR_ATTEMPT",
+      "vector_id": "OAUTH-PKCE-DOWNGRADE",
+      "data": {
+        "round": 3,
+        "attempt": 1,
+        "vector_id": "OAUTH-PKCE-DOWNGRADE"
+      }
+    },
+    {
+      "step_id": 17,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.666118+00:00",
+      "event_type": "PATCH_APPLIED",
+      "vector_id": null,
+      "data": {
+        "patch": {
+          "vector_id": "OAUTH-PKCE-DOWNGRADE",
+          "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,6 +1,15 @@\n+    # RFC 7636 Section 4.4.1 PKCE Mandatory Enforcement & Method Downgrade Protection\n     if auth_data.get(\"code_challenge\"):\n-        if req.code_verifier is None:\n-            pass  # Flaw: Silently continues without verifier!\n-        else:\n-            if not verify_pkce(req.code_verifier, auth_data[\"code_challenge\"], auth_data[\"code_challenge_method\"]):\n-                return JSONResponse(status_code=400, content={\"error\": \"invalid_grant\", \"error_description\": \"PKCE verification failed\"})\n+        if not req.code_verifier:\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_grant\", \"error_description\": \"code_verifier is required when code_challenge is set\"}\n+            )\n+        # RFC 7636 Section 4.2: Enforce S256 method to prevent plain method downgrades\n+        if auth_data.get(\"code_challenge_method\") != \"S256\":\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_request\", \"error_description\": \"Insecure plain PKCE method rejected; S256 is required\"}\n+            )\n+        if not verify_pkce(req.code_verifier, auth_data[\"code_challenge\"], \"S256\"):\n+            return JSONResponse(status_code=400, content={\"error\": \"invalid_grant\", \"error_description\": \"PKCE verification failed\"})",
+          "target_file": "target_app_under_test.py",
+          "explanation": "Structurally enforce mandatory code_verifier presence and reject insecure plain method downgrades per RFC 7636.",
+          "lines_changed": 15,
+          "ast_validated": true
+        }
+      }
+    },
+    {
+      "step_id": 18,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.687719+00:00",
+      "event_type": "DUAL_GATE_EVALUATED",
+      "vector_id": null,
+      "data": {
+        "result": {
+          "security_check_passed": true,
+          "golden_path_passed": true,
+          "exploit_output": "Security Gate PASSED: Attack vector OAUTH-PKCE-DOWNGRADE and all 4 mutation variants successfully neutralized.",
+          "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+          "mutations_tested": 4,
+          "mutations_blocked": 4,
+          "code_quality_passed": true
+        }
+      }
+    },
+    {
+      "step_id": 19,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.687719+00:00",
+      "event_type": "VECTOR_RESOLVED",
+      "vector_id": "OAUTH-PKCE-DOWNGRADE",
+      "data": {
+        "vector_id": "OAUTH-PKCE-DOWNGRADE",
+        "patch": {
+          "vector_id": "OAUTH-PKCE-DOWNGRADE",
+          "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,6 +1,15 @@\n+    # RFC 7636 Section 4.4.1 PKCE Mandatory Enforcement & Method Downgrade Protection\n     if auth_data.get(\"code_challenge\"):\n-        if req.code_verifier is None:\n-            pass  # Flaw: Silently continues without verifier!\n-        else:\n-            if not verify_pkce(req.code_verifier, auth_data[\"code_challenge\"], auth_data[\"code_challenge_method\"]):\n-                return JSONResponse(status_code=400, content={\"error\": \"invalid_grant\", \"error_description\": \"PKCE verification failed\"})\n+        if not req.code_verifier:\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_grant\", \"error_description\": \"code_verifier is required when code_challenge is set\"}\n+            )\n+        # RFC 7636 Section 4.2: Enforce S256 method to prevent plain method downgrades\n+        if auth_data.get(\"code_challenge_method\") != \"S256\":\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_request\", \"error_description\": \"Insecure plain PKCE method rejected; S256 is required\"}\n+            )\n+        if not verify_pkce(req.code_verifier, auth_data[\"code_challenge\"], \"S256\"):\n+            return JSONResponse(status_code=400, content={\"error\": \"invalid_grant\", \"error_description\": \"PKCE verification failed\"})",
+          "target_file": "target_app_under_test.py",
+          "explanation": "Structurally enforce mandatory code_verifier presence and reject insecure plain method downgrades per RFC 7636.",
+          "lines_changed": 15,
+          "ast_validated": true
+        }
+      }
+    },
+    {
+      "step_id": 20,
+      "round_number": 4,
+      "timestamp": "2026-11-24T20:08:21.687719+00:00",
+      "event_type": "ROUND_START",
+      "vector_id": "OAUTH-SCOPE-ESCALATION",
+      "data": {
+        "round": 4,
+        "vector_id": "OAUTH-SCOPE-ESCALATION",
+        "decision": {
+          "selected_vector": "OAUTH-SCOPE-ESCALATION",
+          "total_score": 95,
+          "base_score": 75,
+          "boost": 20,
+          "boost_reason": "Endpoint correlation boost (+20) from preceding /token compromise",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 95,
+              "base_score": 75,
+              "boost": 20,
+              "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+            },
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": "/token"
+        }
+      }
+    },
+    {
+      "step_id": 21,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.703321+00:00",
+      "event_type": "VULNERABILITY_FOUND",
+      "vector_id": null,
+      "data": {
+        "proof": {
+          "vector_id": "OAUTH-SCOPE-ESCALATION",
+          "category": "PRIVILEGE_ESCALATION",
+          "description": "Token endpoint granted elevated unconsented scopes exceeding user consent.",
+          "exploit_payload": {
+            "mutation_type": "ADMIN_SPACE_DELIMITED",
+            "description": "Appending 'admin' role via standard space delimiter",
+            "requested_scope": "read:workspace admin",
+            "granted_scope": "read:workspace admin",
+            "status": 200,
+            "body": {
+              "access_token": "at_IvuvdRdO9qjsjwjgvuRkvmdBo88vEjuvcn_84b0Y5mQ",
+              "token_type": "Bearer",
+              "expires_in": 3600,
+              "scope": "read:workspace admin"
+            }
+          },
+          "target_endpoint": "/token",
+          "response_status": 200,
+          "response_body": {
+            "access_token": "at_IvuvdRdO9qjsjwjgvuRkvmdBo88vEjuvcn_84b0Y5mQ",
+            "token_type": "Bearer",
+            "expires_in": 3600,
+            "scope": "read:workspace admin"
+          },
+          "poc_summary": "Scope escalation succeeded on 4/4 variants. Granted: read:workspace admin",
+          "mutations_tested": 4,
+          "mutations_succeeded": 4,
+          "mutation_details": []
+        },
+        "decision": {
+          "selected_vector": "OAUTH-SCOPE-ESCALATION",
+          "total_score": 95,
+          "base_score": 75,
+          "boost": 20,
+          "boost_reason": "Endpoint correlation boost (+20) from preceding /token compromise",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 95,
+              "base_score": 75,
+              "boost": 20,
+              "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+            },
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": "/token"
+        }
+      }
+    },
+    {
+      "step_id": 22,
+      "round_number": 4,
+      "timestamp": "2026-11-24T20:08:21.703321+00:00",
+      "event_type": "REPAIR_ATTEMPT",
+      "vector_id": "OAUTH-SCOPE-ESCALATION",
+      "data": {
+        "round": 4,
+        "attempt": 1,
+        "vector_id": "OAUTH-SCOPE-ESCALATION"
+      }
+    },
+    {
+      "step_id": 23,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.707343+00:00",
+      "event_type": "PATCH_APPLIED",
+      "vector_id": null,
+      "data": {
+        "patch": {
+          "vector_id": "OAUTH-SCOPE-ESCALATION",
+          "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1 +1,13 @@\n-    granted_scope = req.scope if req.scope else auth_data[\"scope\"]\n+    # RFC 6749 Section 3.3: Scope Authorization Validation\n+    authorized_scopes = set(auth_data[\"scope\"].split())\n+    if req.scope:\n+        requested_scopes = set(req.scope.split())\n+        # Check if client is requesting scopes beyond what was consented\n+        if not requested_scopes.issubset(authorized_scopes):\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_scope\", \"error_description\": \"Requested scopes exceed originally consented authorization\"}\n+            )\n+        granted_scope = \" \".join(sorted(requested_scopes))\n+    else:\n+        granted_scope = auth_data[\"scope\"]",
+          "target_file": "target_app_under_test.py",
+          "explanation": "Validate that requested scopes at the token endpoint are a strict subset of originally consented scopes.",
+          "lines_changed": 13,
+          "ast_validated": true
+        }
+      }
+    },
+    {
+      "step_id": 24,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.728851+00:00",
+      "event_type": "DUAL_GATE_EVALUATED",
+      "vector_id": null,
+      "data": {
+        "result": {
+          "security_check_passed": true,
+          "golden_path_passed": true,
+          "exploit_output": "Security Gate PASSED: Attack vector OAUTH-SCOPE-ESCALATION and all 4 mutation variants successfully neutralized.",
+          "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+          "mutations_tested": 4,
+          "mutations_blocked": 4,
+          "code_quality_passed": true
+        }
+      }
+    },
+    {
+      "step_id": 25,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.728851+00:00",
+      "event_type": "VECTOR_RESOLVED",
+      "vector_id": "OAUTH-SCOPE-ESCALATION",
+      "data": {
+        "vector_id": "OAUTH-SCOPE-ESCALATION",
+        "patch": {
+          "vector_id": "OAUTH-SCOPE-ESCALATION",
+          "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1 +1,13 @@\n-    granted_scope = req.scope if req.scope else auth_data[\"scope\"]\n+    # RFC 6749 Section 3.3: Scope Authorization Validation\n+    authorized_scopes = set(auth_data[\"scope\"].split())\n+    if req.scope:\n+        requested_scopes = set(req.scope.split())\n+        # Check if client is requesting scopes beyond what was consented\n+        if not requested_scopes.issubset(authorized_scopes):\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_scope\", \"error_description\": \"Requested scopes exceed originally consented authorization\"}\n+            )\n+        granted_scope = \" \".join(sorted(requested_scopes))\n+    else:\n+        granted_scope = auth_data[\"scope\"]",
+          "target_file": "target_app_under_test.py",
+          "explanation": "Validate that requested scopes at the token endpoint are a strict subset of originally consented scopes.",
+          "lines_changed": 13,
+          "ast_validated": true
+        }
+      }
+    },
+    {
+      "step_id": 26,
+      "round_number": 5,
+      "timestamp": "2026-11-24T20:08:21.728851+00:00",
+      "event_type": "ROUND_START",
+      "vector_id": "OAUTH-STATE-CSRF",
+      "data": {
+        "round": 5,
+        "vector_id": "OAUTH-STATE-CSRF",
+        "decision": {
+          "selected_vector": "OAUTH-STATE-CSRF",
+          "total_score": 75,
+          "base_score": 75,
+          "boost": 0,
+          "boost_reason": "Base severity score",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": "/token"
+        }
+      }
+    },
+    {
+      "step_id": 27,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.740508+00:00",
+      "event_type": "VULNERABILITY_FOUND",
+      "vector_id": null,
+      "data": {
+        "proof": {
+          "vector_id": "OAUTH-STATE-CSRF",
+          "category": "CSRF",
+          "description": "Authorization endpoint granted code without validating state parameter presence or entropy.",
+          "exploit_payload": {
+            "mutation_type": "OMITTED",
+            "description": "Omission of state parameter entirely",
+            "status": 200,
+            "body": {
+              "redirect_to": "https://acme-saas.example.com/oauth/redirect?code=acm_30c206793aca81b622d8f88fad196716",
+              "code": "acm_30c206793aca81b622d8f88fad196716",
+              "state": null
+            }
+          },
+          "target_endpoint": "/authorize",
+          "response_status": 200,
+          "response_body": {
+            "redirect_to": "https://acme-saas.example.com/oauth/redirect?code=acm_30c206793aca81b622d8f88fad196716",
+            "code": "acm_30c206793aca81b622d8f88fad196716",
+            "state": null
+          },
+          "poc_summary": "State CSRF flaw succeeded on 3/3 variants. Trigger: Omission of state parameter entirely",
+          "mutations_tested": 3,
+          "mutations_succeeded": 3,
+          "mutation_details": []
+        },
+        "decision": {
+          "selected_vector": "OAUTH-STATE-CSRF",
+          "total_score": 75,
+          "base_score": 75,
+          "boost": 0,
+          "boost_reason": "Base severity score",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": "/token"
+        }
+      }
+    },
+    {
+      "step_id": 28,
+      "round_number": 5,
+      "timestamp": "2026-11-24T20:08:21.740508+00:00",
+      "event_type": "REPAIR_ATTEMPT",
+      "vector_id": "OAUTH-STATE-CSRF",
+      "data": {
+        "round": 5,
+        "attempt": 1,
+        "vector_id": "OAUTH-STATE-CSRF"
+      }
+    },
+    {
+      "step_id": 29,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.744509+00:00",
+      "event_type": "PATCH_APPLIED",
+      "vector_id": null,
+      "data": {
+        "patch": {
+          "vector_id": "OAUTH-STATE-CSRF",
+          "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,7 @@\n-    # 3. State Parameter Check (VULNERABILITY: state omitted/not enforced, allowing login CSRF)\n-    # [UNENFORCED IN VULNERABLE BASELINE]\n-\n+    # 3. State Parameter Check (RFC 6749 Section 10.12)\n+    # Enforce state parameter presence and minimum entropy to prevent Login CSRF\n+    if not state or len(state.strip()) < 8:\n+        return JSONResponse(\n+            status_code=400,\n+            content={\"error\": \"invalid_request\", \"error_description\": \"state parameter with sufficient entropy is required for CSRF protection\"}\n+        )",
+          "target_file": "target_app_under_test.py",
+          "explanation": "Structurally inject state presence and entropy guard to block Cross-Site Request Forgery (CSRF).",
+          "lines_changed": 7,
+          "ast_validated": true
+        }
+      }
+    },
+    {
+      "step_id": 30,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.764475+00:00",
+      "event_type": "DUAL_GATE_EVALUATED",
+      "vector_id": null,
+      "data": {
+        "result": {
+          "security_check_passed": true,
+          "golden_path_passed": true,
+          "exploit_output": "Security Gate PASSED: Attack vector OAUTH-STATE-CSRF and all 3 mutation variants successfully neutralized.",
+          "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+          "mutations_tested": 3,
+          "mutations_blocked": 3,
+          "code_quality_passed": true
+        }
+      }
+    },
+    {
+      "step_id": 31,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.764475+00:00",
+      "event_type": "VECTOR_RESOLVED",
+      "vector_id": "OAUTH-STATE-CSRF",
+      "data": {
+        "vector_id": "OAUTH-STATE-CSRF",
+        "patch": {
+          "vector_id": "OAUTH-STATE-CSRF",
+          "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,7 @@\n-    # 3. State Parameter Check (VULNERABILITY: state omitted/not enforced, allowing login CSRF)\n-    # [UNENFORCED IN VULNERABLE BASELINE]\n-\n+    # 3. State Parameter Check (RFC 6749 Section 10.12)\n+    # Enforce state parameter presence and minimum entropy to prevent Login CSRF\n+    if not state or len(state.strip()) < 8:\n+        return JSONResponse(\n+            status_code=400,\n+            content={\"error\": \"invalid_request\", \"error_description\": \"state parameter with sufficient entropy is required for CSRF protection\"}\n+        )",
+          "target_file": "target_app_under_test.py",
+          "explanation": "Structurally inject state presence and entropy guard to block Cross-Site Request Forgery (CSRF).",
+          "lines_changed": 7,
+          "ast_validated": true
+        }
+      }
+    },
+    {
+      "step_id": 32,
+      "round_number": 0,
+      "timestamp": "2026-11-24T20:08:21.764475+00:00",
+      "event_type": "SESSION_COMPLETE",
+      "vector_id": null,
+      "data": {
+        "state": {
+          "target_repo_path": "D:\\capstone saas",
+          "active_vector_ids": [
+            "OAUTH-PKCE-DOWNGRADE",
+            "OAUTH-REDIRECT-TRAVERSAL",
+            "OAUTH-STATE-CSRF",
+            "OAUTH-CODE-REPLAY",
+            "OAUTH-SCOPE-ESCALATION"
+          ],
+          "pending_vectors": [],
+          "remediated_vectors": [
+            "OAUTH-REDIRECT-TRAVERSAL",
+            "OAUTH-CODE-REPLAY",
+            "OAUTH-PKCE-DOWNGRADE",
+            "OAUTH-SCOPE-ESCALATION",
+            "OAUTH-STATE-CSRF"
+          ],
+          "unresolved_vectors": [],
+          "current_proof": {
+            "vector_id": "OAUTH-STATE-CSRF",
+            "category": "CSRF",
+            "description": "Authorization endpoint granted code without validating state parameter presence or entropy.",
+            "exploit_payload": {
+              "mutation_type": "OMITTED",
+              "description": "Omission of state parameter entirely",
+              "status": 200,
+              "body": {
+                "redirect_to": "https://acme-saas.example.com/oauth/redirect?code=acm_30c206793aca81b622d8f88fad196716",
+                "code": "acm_30c206793aca81b622d8f88fad196716",
+                "state": null
+              }
+            },
+            "target_endpoint": "/authorize",
+            "response_status": 200,
+            "response_body": {
+              "redirect_to": "https://acme-saas.example.com/oauth/redirect?code=acm_30c206793aca81b622d8f88fad196716",
+              "code": "acm_30c206793aca81b622d8f88fad196716",
+              "state": null
+            },
+            "poc_summary": "State CSRF flaw succeeded on 3/3 variants. Trigger: Omission of state parameter entirely",
+            "mutations_tested": 3,
+            "mutations_succeeded": 3,
+            "mutation_details": []
+          },
+          "current_patch": null,
+          "current_gate_result": null,
+          "history": [
+            {
+              "round_number": 1,
+              "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+              "attack_succeeded": true,
+              "remediation_attempted": true,
+              "adaptive_decision": {
+                "selected_vector": "OAUTH-REDIRECT-TRAVERSAL",
+                "total_score": 100,
+                "base_score": 100,
+                "boost": 0,
+                "boost_reason": "Base severity score",
+                "candidate_ranking": [
+                  {
+                    "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+                    "total_score": 100,
+                    "base_score": 100,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-CODE-REPLAY",
+                    "total_score": 100,
+                    "base_score": 100,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-PKCE-DOWNGRADE",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-STATE-CSRF",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-SCOPE-ESCALATION",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  }
+                ],
+                "last_endpoint_exploited": null
+              },
+              "proof": {
+                "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+                "category": "REDIRECT_URI",
+                "description": "Authorization endpoint accepted path-traversal or manipulated redirect_uri bypassing whitelist.",
+                "exploit_payload": {
+                  "mutation_type": "PLAIN_TRAVERSAL",
+                  "description": "Standard directory traversal via /../../",
+                  "uri": "https://acme-saas.example.com/oauth/redirect/../../attacker_leak",
+                  "status": 200,
+                  "body": {
+                    "redirect_to": "https://acme-saas.example.com/oauth/redirect/../../attacker_leak?code=acm_4381f5481f5db8afbc7fc7b4b16e36ff&state=umb_685a84f9f9c387db",
+                    "code": "acm_4381f5481f5db8afbc7fc7b4b16e36ff",
+                    "state": "umb_685a84f9f9c387db"
+                  }
+                },
+                "target_endpoint": "/authorize",
+                "response_status": 200,
+                "response_body": {
+                  "redirect_to": "https://acme-saas.example.com/oauth/redirect/../../attacker_leak?code=acm_4381f5481f5db8afbc7fc7b4b16e36ff&state=umb_685a84f9f9c387db",
+                  "code": "acm_4381f5481f5db8afbc7fc7b4b16e36ff",
+                  "state": "umb_685a84f9f9c387db"
+                },
+                "poc_summary": "Redirect URI bypass succeeded on 4/5 variants. Trigger: Standard directory traversal via /../../ (https://acme-saas.example.com/oauth/redirect/../../attacker_leak)",
+                "mutations_tested": 5,
+                "mutations_succeeded": 4,
+                "mutation_details": []
+              },
+              "patch_applied": {
+                "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+                "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,4 @@\n-    valid_redirect = any(redirect_uri.startswith(reg_uri) for reg_uri in client[\"redirect_uris\"])\n-    if not valid_redirect:\n-        return JSONResponse(status_code=400, content={\"error\": \"invalid_request\", \"error_description\": \"Invalid redirect_uri\"})\n+    # 2. Redirect URI Validation (RFC 6749 Section 3.1.2 & RFC 6819 Section 4.4.1.7)\n+    # Strictly require exact string matching against pre-registered redirect_uris\n+    if redirect_uri not in client[\"redirect_uris\"]:\n+        return JSONResponse(status_code=400, content={\"error\": \"invalid_request\", \"error_description\": \"redirect_uri must exactly match registered URI\"})",
+                "target_file": "target_app_under_test.py",
+                "explanation": "Replace weak startswith prefix check with exact URI matching to prevent path traversal and open redirects.",
+                "lines_changed": 4,
+                "ast_validated": true
+              },
+              "gate_result": {
+                "security_check_passed": true,
+                "golden_path_passed": true,
+                "exploit_output": "Security Gate PASSED: Attack vector OAUTH-REDIRECT-TRAVERSAL and all 5 mutation variants successfully neutralized.",
+                "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+                "mutations_tested": 5,
+                "mutations_blocked": 5,
+                "code_quality_passed": true
+              },
+              "status": "PATCHED_AND_VERIFIED"
+            },
+            {
+              "round_number": 2,
+              "vector_id": "OAUTH-CODE-REPLAY",
+              "attack_succeeded": true,
+              "remediation_attempted": true,
+              "adaptive_decision": {
+                "selected_vector": "OAUTH-CODE-REPLAY",
+                "total_score": 100,
+                "base_score": 100,
+                "boost": 0,
+                "boost_reason": "Base severity score",
+                "candidate_ranking": [
+                  {
+                    "vector_id": "OAUTH-CODE-REPLAY",
+                    "total_score": 100,
+                    "base_score": 100,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-STATE-CSRF",
+                    "total_score": 95,
+                    "base_score": 75,
+                    "boost": 20,
+                    "reason": "Endpoint correlation boost (+20) from preceding /authorize compromise"
+                  },
+                  {
+                    "vector_id": "OAUTH-PKCE-DOWNGRADE",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-SCOPE-ESCALATION",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  }
+                ],
+                "last_endpoint_exploited": "/authorize"
+              },
+              "proof": {
+                "vector_id": "OAUTH-CODE-REPLAY",
+                "category": "REPLAY",
+                "description": "Authorization code was successfully redeemed multiple times for different access tokens.",
+                "exploit_payload": {
+                  "replayed_code": "acm_79329ff4962833aefd81d984fd22fa55"
+                },
+                "target_endpoint": "/token",
+                "response_status": 200,
+                "response_body": {
+                  "access_token": "at_dHVs2Fs6fm21XxFkduDwrNisSY04NutvQ5hcV0ccvrI",
+                  "token_type": "Bearer",
+                  "expires_in": 3600,
+                  "scope": "read:workspace"
+                },
+                "poc_summary": "Replay of code acm_79329ff4962833aefd81d984fd22fa55 produced second access token: at_dHVs2Fs6fm21XxFkduDwrNisSY04NutvQ5hcV0ccvrI.",
+                "mutations_tested": 1,
+                "mutations_succeeded": 1,
+                "mutation_details": []
+              },
+              "patch_applied": {
+                "vector_id": "OAUTH-CODE-REPLAY",
+                "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,10 @@\n-    # VULNERABILITY: Code is not marked as used, allowing multi-redemption / replay\n-    # [UNENFORCED IN VULNERABLE BASELINE]\n+    # RFC 6749 Section 4.1.2: One-Time Use Enforcement\n+    if auth_data.get(\"used\", False):\n+        # Invalidate code and reject replay attempt immediately\n+        return JSONResponse(\n+            status_code=400,\n+            content={\"error\": \"invalid_grant\", \"error_description\": \"Authorization code has already been redeemed (replay detected)\"}\n+        )\n+    # Mark code as consumed immediately\n+    auth_data[\"used\"] = True\n ",
+                "target_file": "target_app_under_test.py",
+                "explanation": "Enforce single-use authorization codes by rejecting replay attempts and marking codes as consumed immediately.",
+                "lines_changed": 10,
+                "ast_validated": true
+              },
+              "gate_result": {
+                "security_check_passed": true,
+                "golden_path_passed": true,
+                "exploit_output": "Security Gate PASSED: Attack vector OAUTH-CODE-REPLAY and all 1 mutation variants successfully neutralized.",
+                "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+                "mutations_tested": 1,
+                "mutations_blocked": 1,
+                "code_quality_passed": true
+              },
+              "status": "PATCHED_AND_VERIFIED"
+            },
+            {
+              "round_number": 3,
+              "vector_id": "OAUTH-PKCE-DOWNGRADE",
+              "attack_succeeded": true,
+              "remediation_attempted": true,
+              "adaptive_decision": {
+                "selected_vector": "OAUTH-PKCE-DOWNGRADE",
+                "total_score": 95,
+                "base_score": 75,
+                "boost": 20,
+                "boost_reason": "Endpoint correlation boost (+20) from preceding /token compromise",
+                "candidate_ranking": [
+                  {
+                    "vector_id": "OAUTH-PKCE-DOWNGRADE",
+                    "total_score": 95,
+                    "base_score": 75,
+                    "boost": 20,
+                    "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+                  },
+                  {
+                    "vector_id": "OAUTH-SCOPE-ESCALATION",
+                    "total_score": 95,
+                    "base_score": 75,
+                    "boost": 20,
+                    "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+                  },
+                  {
+                    "vector_id": "OAUTH-STATE-CSRF",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  }
+                ],
+                "last_endpoint_exploited": "/token"
+              },
+              "proof": {
+                "vector_id": "OAUTH-PKCE-DOWNGRADE",
+                "category": "PKCE",
+                "description": "Token endpoint issued access token with missing or invalid PKCE verifier, violating RFC 7636.",
+                "exploit_payload": {
+                  "mutation_type": "OMISSION",
+                  "description": "Complete omission of code_verifier field",
+                  "status": 200,
+                  "body": {
+                    "access_token": "at_GU41Vttq__azL5GjNjpxpW4V-V38UgccPuAhvwFlEos",
+                    "token_type": "Bearer",
+                    "expires_in": 3600,
+                    "scope": "read:workspace"
+                  }
+                },
+                "target_endpoint": "/token",
+                "response_status": 200,
+                "response_body": {
+                  "access_token": "at_GU41Vttq__azL5GjNjpxpW4V-V38UgccPuAhvwFlEos",
+                  "token_type": "Bearer",
+                  "expires_in": 3600,
+                  "scope": "read:workspace"
+                },
+                "poc_summary": "PKCE bypass succeeded on 2/4 mutation variants. Primary: Complete omission of code_verifier field",
+                "mutations_tested": 4,
+                "mutations_succeeded": 2,
+                "mutation_details": []
+              },
+              "patch_applied": {
+                "vector_id": "OAUTH-PKCE-DOWNGRADE",
+                "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,6 +1,15 @@\n+    # RFC 7636 Section 4.4.1 PKCE Mandatory Enforcement & Method Downgrade Protection\n     if auth_data.get(\"code_challenge\"):\n-        if req.code_verifier is None:\n-            pass  # Flaw: Silently continues without verifier!\n-        else:\n-            if not verify_pkce(req.code_verifier, auth_data[\"code_challenge\"], auth_data[\"code_challenge_method\"]):\n-                return JSONResponse(status_code=400, content={\"error\": \"invalid_grant\", \"error_description\": \"PKCE verification failed\"})\n+        if not req.code_verifier:\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_grant\", \"error_description\": \"code_verifier is required when code_challenge is set\"}\n+            )\n+        # RFC 7636 Section 4.2: Enforce S256 method to prevent plain method downgrades\n+        if auth_data.get(\"code_challenge_method\") != \"S256\":\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_request\", \"error_description\": \"Insecure plain PKCE method rejected; S256 is required\"}\n+            )\n+        if not verify_pkce(req.code_verifier, auth_data[\"code_challenge\"], \"S256\"):\n+            return JSONResponse(status_code=400, content={\"error\": \"invalid_grant\", \"error_description\": \"PKCE verification failed\"})",
+                "target_file": "target_app_under_test.py",
+                "explanation": "Structurally enforce mandatory code_verifier presence and reject insecure plain method downgrades per RFC 7636.",
+                "lines_changed": 15,
+                "ast_validated": true
+              },
+              "gate_result": {
+                "security_check_passed": true,
+                "golden_path_passed": true,
+                "exploit_output": "Security Gate PASSED: Attack vector OAUTH-PKCE-DOWNGRADE and all 4 mutation variants successfully neutralized.",
+                "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+                "mutations_tested": 4,
+                "mutations_blocked": 4,
+                "code_quality_passed": true
+              },
+              "status": "PATCHED_AND_VERIFIED"
+            },
+            {
+              "round_number": 4,
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "attack_succeeded": true,
+              "remediation_attempted": true,
+              "adaptive_decision": {
+                "selected_vector": "OAUTH-SCOPE-ESCALATION",
+                "total_score": 95,
+                "base_score": 75,
+                "boost": 20,
+                "boost_reason": "Endpoint correlation boost (+20) from preceding /token compromise",
+                "candidate_ranking": [
+                  {
+                    "vector_id": "OAUTH-SCOPE-ESCALATION",
+                    "total_score": 95,
+                    "base_score": 75,
+                    "boost": 20,
+                    "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+                  },
+                  {
+                    "vector_id": "OAUTH-STATE-CSRF",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  }
+                ],
+                "last_endpoint_exploited": "/token"
+              },
+              "proof": {
+                "vector_id": "OAUTH-SCOPE-ESCALATION",
+                "category": "PRIVILEGE_ESCALATION",
+                "description": "Token endpoint granted elevated unconsented scopes exceeding user consent.",
+                "exploit_payload": {
+                  "mutation_type": "ADMIN_SPACE_DELIMITED",
+                  "description": "Appending 'admin' role via standard space delimiter",
+                  "requested_scope": "read:workspace admin",
+                  "granted_scope": "read:workspace admin",
+                  "status": 200,
+                  "body": {
+                    "access_token": "at_IvuvdRdO9qjsjwjgvuRkvmdBo88vEjuvcn_84b0Y5mQ",
+                    "token_type": "Bearer",
+                    "expires_in": 3600,
+                    "scope": "read:workspace admin"
+                  }
+                },
+                "target_endpoint": "/token",
+                "response_status": 200,
+                "response_body": {
+                  "access_token": "at_IvuvdRdO9qjsjwjgvuRkvmdBo88vEjuvcn_84b0Y5mQ",
+                  "token_type": "Bearer",
+                  "expires_in": 3600,
+                  "scope": "read:workspace admin"
+                },
+                "poc_summary": "Scope escalation succeeded on 4/4 variants. Granted: read:workspace admin",
+                "mutations_tested": 4,
+                "mutations_succeeded": 4,
+                "mutation_details": []
+              },
+              "patch_applied": {
+                "vector_id": "OAUTH-SCOPE-ESCALATION",
+                "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1 +1,13 @@\n-    granted_scope = req.scope if req.scope else auth_data[\"scope\"]\n+    # RFC 6749 Section 3.3: Scope Authorization Validation\n+    authorized_scopes = set(auth_data[\"scope\"].split())\n+    if req.scope:\n+        requested_scopes = set(req.scope.split())\n+        # Check if client is requesting scopes beyond what was consented\n+        if not requested_scopes.issubset(authorized_scopes):\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_scope\", \"error_description\": \"Requested scopes exceed originally consented authorization\"}\n+            )\n+        granted_scope = \" \".join(sorted(requested_scopes))\n+    else:\n+        granted_scope = auth_data[\"scope\"]",
+                "target_file": "target_app_under_test.py",
+                "explanation": "Validate that requested scopes at the token endpoint are a strict subset of originally consented scopes.",
+                "lines_changed": 13,
+                "ast_validated": true
+              },
+              "gate_result": {
+                "security_check_passed": true,
+                "golden_path_passed": true,
+                "exploit_output": "Security Gate PASSED: Attack vector OAUTH-SCOPE-ESCALATION and all 4 mutation variants successfully neutralized.",
+                "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+                "mutations_tested": 4,
+                "mutations_blocked": 4,
+                "code_quality_passed": true
+              },
+              "status": "PATCHED_AND_VERIFIED"
+            },
+            {
+              "round_number": 5,
+              "vector_id": "OAUTH-STATE-CSRF",
+              "attack_succeeded": true,
+              "remediation_attempted": true,
+              "adaptive_decision": {
+                "selected_vector": "OAUTH-STATE-CSRF",
+                "total_score": 75,
+                "base_score": 75,
+                "boost": 0,
+                "boost_reason": "Base severity score",
+                "candidate_ranking": [
+                  {
+                    "vector_id": "OAUTH-STATE-CSRF",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  }
+                ],
+                "last_endpoint_exploited": "/token"
+              },
+              "proof": {
+                "vector_id": "OAUTH-STATE-CSRF",
+                "category": "CSRF",
+                "description": "Authorization endpoint granted code without validating state parameter presence or entropy.",
+                "exploit_payload": {
+                  "mutation_type": "OMITTED",
+                  "description": "Omission of state parameter entirely",
+                  "status": 200,
+                  "body": {
+                    "redirect_to": "https://acme-saas.example.com/oauth/redirect?code=acm_30c206793aca81b622d8f88fad196716",
+                    "code": "acm_30c206793aca81b622d8f88fad196716",
+                    "state": null
+                  }
+                },
+                "target_endpoint": "/authorize",
+                "response_status": 200,
+                "response_body": {
+                  "redirect_to": "https://acme-saas.example.com/oauth/redirect?code=acm_30c206793aca81b622d8f88fad196716",
+                  "code": "acm_30c206793aca81b622d8f88fad196716",
+                  "state": null
+                },
+                "poc_summary": "State CSRF flaw succeeded on 3/3 variants. Trigger: Omission of state parameter entirely",
+                "mutations_tested": 3,
+                "mutations_succeeded": 3,
+                "mutation_details": []
+              },
+              "patch_applied": {
+                "vector_id": "OAUTH-STATE-CSRF",
+                "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,7 @@\n-    # 3. State Parameter Check (VULNERABILITY: state omitted/not enforced, allowing login CSRF)\n-    # [UNENFORCED IN VULNERABLE BASELINE]\n-\n+    # 3. State Parameter Check (RFC 6749 Section 10.12)\n+    # Enforce state parameter presence and minimum entropy to prevent Login CSRF\n+    if not state or len(state.strip()) < 8:\n+        return JSONResponse(\n+            status_code=400,\n+            content={\"error\": \"invalid_request\", \"error_description\": \"state parameter with sufficient entropy is required for CSRF protection\"}\n+        )",
+                "target_file": "target_app_under_test.py",
+                "explanation": "Structurally inject state presence and entropy guard to block Cross-Site Request Forgery (CSRF).",
+                "lines_changed": 7,
+                "ast_validated": true
+              },
+              "gate_result": {
+                "security_check_passed": true,
+                "golden_path_passed": true,
+                "exploit_output": "Security Gate PASSED: Attack vector OAUTH-STATE-CSRF and all 3 mutation variants successfully neutralized.",
+                "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+                "mutations_tested": 3,
+                "mutations_blocked": 3,
+                "code_quality_passed": true
+              },
+              "status": "PATCHED_AND_VERIFIED"
+            }
+          ],
+          "is_converged": true,
+          "total_rounds": 5
+        }
+      }
+    }
+  ],
+  "rounds": [
+    {
+      "round_number": 1,
+      "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+      "timestamp": "2026-11-24T20:08:21.574206+00:00",
+      "threat_info": {
+        "name": "Redirect URI Path Traversal / Wildcard Bypass",
+        "description": "Tests whether authorization endpoint allows redirect_uri manipulation (e.g. directory traversal / path tampering) to leak auth codes.",
+        "category": "REDIRECT_URI",
+        "rfc_reference": "RFC 6749 Section 3.1.2 & RFC 6819 Section 4.4.1.7",
+        "severity": "CRITICAL"
+      },
+      "adaptive_decision": {
+        "selected_vector": "OAUTH-REDIRECT-TRAVERSAL",
+        "total_score": 100,
+        "base_score": 100,
+        "boost": 0,
+        "boost_reason": "Base severity score",
+        "candidate_ranking": [
+          {
+            "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+            "total_score": 100,
+            "base_score": 100,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-CODE-REPLAY",
+            "total_score": 100,
+            "base_score": 100,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-PKCE-DOWNGRADE",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-STATE-CSRF",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-SCOPE-ESCALATION",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          }
+        ],
+        "last_endpoint_exploited": null
+      },
+      "vulnerability": {
+        "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+        "category": "REDIRECT_URI",
+        "description": "Authorization endpoint accepted path-traversal or manipulated redirect_uri bypassing whitelist.",
+        "exploit_payload": {
+          "mutation_type": "PLAIN_TRAVERSAL",
+          "description": "Standard directory traversal via /../../",
+          "uri": "https://acme-saas.example.com/oauth/redirect/../../attacker_leak",
+          "status": 200,
+          "body": {
+            "redirect_to": "https://acme-saas.example.com/oauth/redirect/../../attacker_leak?code=acm_4381f5481f5db8afbc7fc7b4b16e36ff&state=umb_685a84f9f9c387db",
+            "code": "acm_4381f5481f5db8afbc7fc7b4b16e36ff",
+            "state": "umb_685a84f9f9c387db"
+          }
+        },
+        "target_endpoint": "/authorize",
+        "response_status": 200,
+        "response_body": {
+          "redirect_to": "https://acme-saas.example.com/oauth/redirect/../../attacker_leak?code=acm_4381f5481f5db8afbc7fc7b4b16e36ff&state=umb_685a84f9f9c387db",
+          "code": "acm_4381f5481f5db8afbc7fc7b4b16e36ff",
+          "state": "umb_685a84f9f9c387db"
+        },
+        "poc_summary": "Redirect URI bypass succeeded on 4/5 variants. Trigger: Standard directory traversal via /../../ (https://acme-saas.example.com/oauth/redirect/../../attacker_leak)",
+        "mutations_tested": 5,
+        "mutations_succeeded": 4,
+        "mutation_details": []
+      },
+      "patch": {
+        "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+        "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,4 @@\n-    valid_redirect = any(redirect_uri.startswith(reg_uri) for reg_uri in client[\"redirect_uris\"])\n-    if not valid_redirect:\n-        return JSONResponse(status_code=400, content={\"error\": \"invalid_request\", \"error_description\": \"Invalid redirect_uri\"})\n+    # 2. Redirect URI Validation (RFC 6749 Section 3.1.2 & RFC 6819 Section 4.4.1.7)\n+    # Strictly require exact string matching against pre-registered redirect_uris\n+    if redirect_uri not in client[\"redirect_uris\"]:\n+        return JSONResponse(status_code=400, content={\"error\": \"invalid_request\", \"error_description\": \"redirect_uri must exactly match registered URI\"})",
+        "target_file": "target_app_under_test.py",
+        "explanation": "Replace weak startswith prefix check with exact URI matching to prevent path traversal and open redirects.",
+        "lines_changed": 4,
+        "ast_validated": true
+      },
+      "gate_result": {
+        "security_check_passed": true,
+        "golden_path_passed": true,
+        "exploit_output": "Security Gate PASSED: Attack vector OAUTH-REDIRECT-TRAVERSAL and all 5 mutation variants successfully neutralized.",
+        "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+        "mutations_tested": 5,
+        "mutations_blocked": 5,
+        "code_quality_passed": true
+      },
+      "status": "PATCHED_AND_VERIFIED"
+    },
+    {
+      "round_number": 2,
+      "vector_id": "OAUTH-CODE-REPLAY",
+      "timestamp": "2026-11-24T20:08:21.609841+00:00",
+      "threat_info": {
+        "name": "Authorization Code Replay / Multi-Redemption",
+        "description": "Tests if authorization codes can be redeemed multiple times to issue multiple access tokens, violating one-time use requirement.",
+        "category": "REPLAY",
+        "rfc_reference": "RFC 6749 Section 4.1.2",
+        "severity": "CRITICAL"
+      },
+      "adaptive_decision": {
+        "selected_vector": "OAUTH-CODE-REPLAY",
+        "total_score": 100,
+        "base_score": 100,
+        "boost": 0,
+        "boost_reason": "Base severity score",
+        "candidate_ranking": [
+          {
+            "vector_id": "OAUTH-CODE-REPLAY",
+            "total_score": 100,
+            "base_score": 100,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-STATE-CSRF",
+            "total_score": 95,
+            "base_score": 75,
+            "boost": 20,
+            "reason": "Endpoint correlation boost (+20) from preceding /authorize compromise"
+          },
+          {
+            "vector_id": "OAUTH-PKCE-DOWNGRADE",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-SCOPE-ESCALATION",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          }
+        ],
+        "last_endpoint_exploited": "/authorize"
+      },
+      "vulnerability": {
+        "vector_id": "OAUTH-CODE-REPLAY",
+        "category": "REPLAY",
+        "description": "Authorization code was successfully redeemed multiple times for different access tokens.",
+        "exploit_payload": {
+          "replayed_code": "acm_79329ff4962833aefd81d984fd22fa55"
+        },
+        "target_endpoint": "/token",
+        "response_status": 200,
+        "response_body": {
+          "access_token": "at_dHVs2Fs6fm21XxFkduDwrNisSY04NutvQ5hcV0ccvrI",
+          "token_type": "Bearer",
+          "expires_in": 3600,
+          "scope": "read:workspace"
+        },
+        "poc_summary": "Replay of code acm_79329ff4962833aefd81d984fd22fa55 produced second access token: at_dHVs2Fs6fm21XxFkduDwrNisSY04NutvQ5hcV0ccvrI.",
+        "mutations_tested": 1,
+        "mutations_succeeded": 1,
+        "mutation_details": []
+      },
+      "patch": {
+        "vector_id": "OAUTH-CODE-REPLAY",
+        "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,10 @@\n-    # VULNERABILITY: Code is not marked as used, allowing multi-redemption / replay\n-    # [UNENFORCED IN VULNERABLE BASELINE]\n+    # RFC 6749 Section 4.1.2: One-Time Use Enforcement\n+    if auth_data.get(\"used\", False):\n+        # Invalidate code and reject replay attempt immediately\n+        return JSONResponse(\n+            status_code=400,\n+            content={\"error\": \"invalid_grant\", \"error_description\": \"Authorization code has already been redeemed (replay detected)\"}\n+        )\n+    # Mark code as consumed immediately\n+    auth_data[\"used\"] = True\n ",
+        "target_file": "target_app_under_test.py",
+        "explanation": "Enforce single-use authorization codes by rejecting replay attempts and marking codes as consumed immediately.",
+        "lines_changed": 10,
+        "ast_validated": true
+      },
+      "gate_result": {
+        "security_check_passed": true,
+        "golden_path_passed": true,
+        "exploit_output": "Security Gate PASSED: Attack vector OAUTH-CODE-REPLAY and all 1 mutation variants successfully neutralized.",
+        "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+        "mutations_tested": 1,
+        "mutations_blocked": 1,
+        "code_quality_passed": true
+      },
+      "status": "PATCHED_AND_VERIFIED"
+    },
+    {
+      "round_number": 3,
+      "vector_id": "OAUTH-PKCE-DOWNGRADE",
+      "timestamp": "2026-11-24T20:08:21.647542+00:00",
+      "threat_info": {
+        "name": "PKCE Downgrade / Omission Attack",
+        "description": "Tests if authorization code exchange succeeds without code_verifier when code_challenge was provided or omitted, violating RFC 7636.",
+        "category": "PKCE",
+        "rfc_reference": "RFC 7636",
+        "severity": "HIGH"
+      },
+      "adaptive_decision": {
+        "selected_vector": "OAUTH-PKCE-DOWNGRADE",
+        "total_score": 95,
+        "base_score": 75,
+        "boost": 20,
+        "boost_reason": "Endpoint correlation boost (+20) from preceding /token compromise",
+        "candidate_ranking": [
+          {
+            "vector_id": "OAUTH-PKCE-DOWNGRADE",
+            "total_score": 95,
+            "base_score": 75,
+            "boost": 20,
+            "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+          },
+          {
+            "vector_id": "OAUTH-SCOPE-ESCALATION",
+            "total_score": 95,
+            "base_score": 75,
+            "boost": 20,
+            "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+          },
+          {
+            "vector_id": "OAUTH-STATE-CSRF",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          }
+        ],
+        "last_endpoint_exploited": "/token"
+      },
+      "vulnerability": {
+        "vector_id": "OAUTH-PKCE-DOWNGRADE",
+        "category": "PKCE",
+        "description": "Token endpoint issued access token with missing or invalid PKCE verifier, violating RFC 7636.",
+        "exploit_payload": {
+          "mutation_type": "OMISSION",
+          "description": "Complete omission of code_verifier field",
+          "status": 200,
+          "body": {
+            "access_token": "at_GU41Vttq__azL5GjNjpxpW4V-V38UgccPuAhvwFlEos",
+            "token_type": "Bearer",
+            "expires_in": 3600,
+            "scope": "read:workspace"
+          }
+        },
+        "target_endpoint": "/token",
+        "response_status": 200,
+        "response_body": {
+          "access_token": "at_GU41Vttq__azL5GjNjpxpW4V-V38UgccPuAhvwFlEos",
+          "token_type": "Bearer",
+          "expires_in": 3600,
+          "scope": "read:workspace"
+        },
+        "poc_summary": "PKCE bypass succeeded on 2/4 mutation variants. Primary: Complete omission of code_verifier field",
+        "mutations_tested": 4,
+        "mutations_succeeded": 2,
+        "mutation_details": []
+      },
+      "patch": {
+        "vector_id": "OAUTH-PKCE-DOWNGRADE",
+        "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,6 +1,15 @@\n+    # RFC 7636 Section 4.4.1 PKCE Mandatory Enforcement & Method Downgrade Protection\n     if auth_data.get(\"code_challenge\"):\n-        if req.code_verifier is None:\n-            pass  # Flaw: Silently continues without verifier!\n-        else:\n-            if not verify_pkce(req.code_verifier, auth_data[\"code_challenge\"], auth_data[\"code_challenge_method\"]):\n-                return JSONResponse(status_code=400, content={\"error\": \"invalid_grant\", \"error_description\": \"PKCE verification failed\"})\n+        if not req.code_verifier:\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_grant\", \"error_description\": \"code_verifier is required when code_challenge is set\"}\n+            )\n+        # RFC 7636 Section 4.2: Enforce S256 method to prevent plain method downgrades\n+        if auth_data.get(\"code_challenge_method\") != \"S256\":\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_request\", \"error_description\": \"Insecure plain PKCE method rejected; S256 is required\"}\n+            )\n+        if not verify_pkce(req.code_verifier, auth_data[\"code_challenge\"], \"S256\"):\n+            return JSONResponse(status_code=400, content={\"error\": \"invalid_grant\", \"error_description\": \"PKCE verification failed\"})",
+        "target_file": "target_app_under_test.py",
+        "explanation": "Structurally enforce mandatory code_verifier presence and reject insecure plain method downgrades per RFC 7636.",
+        "lines_changed": 15,
+        "ast_validated": true
+      },
+      "gate_result": {
+        "security_check_passed": true,
+        "golden_path_passed": true,
+        "exploit_output": "Security Gate PASSED: Attack vector OAUTH-PKCE-DOWNGRADE and all 4 mutation variants successfully neutralized.",
+        "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+        "mutations_tested": 4,
+        "mutations_blocked": 4,
+        "code_quality_passed": true
+      },
+      "status": "PATCHED_AND_VERIFIED"
+    },
+    {
+      "round_number": 4,
+      "vector_id": "OAUTH-SCOPE-ESCALATION",
+      "timestamp": "2026-11-24T20:08:21.687719+00:00",
+      "threat_info": {
+        "name": "Unauthorized Scope Injection / Privilege Escalation",
+        "description": "Tests if token endpoint grants elevated scopes (e.g., admin, write:all) that were never consented to in the authorization step.",
+        "category": "PRIVILEGE_ESCALATION",
+        "rfc_reference": "RFC 6749 Section 3.3",
+        "severity": "HIGH"
+      },
+      "adaptive_decision": {
+        "selected_vector": "OAUTH-SCOPE-ESCALATION",
+        "total_score": 95,
+        "base_score": 75,
+        "boost": 20,
+        "boost_reason": "Endpoint correlation boost (+20) from preceding /token compromise",
+        "candidate_ranking": [
+          {
+            "vector_id": "OAUTH-SCOPE-ESCALATION",
+            "total_score": 95,
+            "base_score": 75,
+            "boost": 20,
+            "reason": "Endpoint correlation boost (+20) from preceding /token compromise"
+          },
+          {
+            "vector_id": "OAUTH-STATE-CSRF",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          }
+        ],
+        "last_endpoint_exploited": "/token"
+      },
+      "vulnerability": {
+        "vector_id": "OAUTH-SCOPE-ESCALATION",
+        "category": "PRIVILEGE_ESCALATION",
+        "description": "Token endpoint granted elevated unconsented scopes exceeding user consent.",
+        "exploit_payload": {
+          "mutation_type": "ADMIN_SPACE_DELIMITED",
+          "description": "Appending 'admin' role via standard space delimiter",
+          "requested_scope": "read:workspace admin",
+          "granted_scope": "read:workspace admin",
+          "status": 200,
+          "body": {
+            "access_token": "at_IvuvdRdO9qjsjwjgvuRkvmdBo88vEjuvcn_84b0Y5mQ",
+            "token_type": "Bearer",
+            "expires_in": 3600,
+            "scope": "read:workspace admin"
+          }
+        },
+        "target_endpoint": "/token",
+        "response_status": 200,
+        "response_body": {
+          "access_token": "at_IvuvdRdO9qjsjwjgvuRkvmdBo88vEjuvcn_84b0Y5mQ",
+          "token_type": "Bearer",
+          "expires_in": 3600,
+          "scope": "read:workspace admin"
+        },
+        "poc_summary": "Scope escalation succeeded on 4/4 variants. Granted: read:workspace admin",
+        "mutations_tested": 4,
+        "mutations_succeeded": 4,
+        "mutation_details": []
+      },
+      "patch": {
+        "vector_id": "OAUTH-SCOPE-ESCALATION",
+        "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1 +1,13 @@\n-    granted_scope = req.scope if req.scope else auth_data[\"scope\"]\n+    # RFC 6749 Section 3.3: Scope Authorization Validation\n+    authorized_scopes = set(auth_data[\"scope\"].split())\n+    if req.scope:\n+        requested_scopes = set(req.scope.split())\n+        # Check if client is requesting scopes beyond what was consented\n+        if not requested_scopes.issubset(authorized_scopes):\n+            return JSONResponse(\n+                status_code=400,\n+                content={\"error\": \"invalid_scope\", \"error_description\": \"Requested scopes exceed originally consented authorization\"}\n+            )\n+        granted_scope = \" \".join(sorted(requested_scopes))\n+    else:\n+        granted_scope = auth_data[\"scope\"]",
+        "target_file": "target_app_under_test.py",
+        "explanation": "Validate that requested scopes at the token endpoint are a strict subset of originally consented scopes.",
+        "lines_changed": 13,
+        "ast_validated": true
+      },
+      "gate_result": {
+        "security_check_passed": true,
+        "golden_path_passed": true,
+        "exploit_output": "Security Gate PASSED: Attack vector OAUTH-SCOPE-ESCALATION and all 4 mutation variants successfully neutralized.",
+        "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+        "mutations_tested": 4,
+        "mutations_blocked": 4,
+        "code_quality_passed": true
+      },
+      "status": "PATCHED_AND_VERIFIED"
+    },
+    {
+      "round_number": 5,
+      "vector_id": "OAUTH-STATE-CSRF",
+      "timestamp": "2026-11-24T20:08:21.728851+00:00",
+      "threat_info": {
+        "name": "State Parameter Omission / Login CSRF",
+        "description": "Tests if client or authorization server completes the flow when state parameter is omitted, allowing cross-site request forgery.",
+        "category": "CSRF",
+        "rfc_reference": "RFC 6749 Section 10.12",
+        "severity": "HIGH"
+      },
+      "adaptive_decision": {
+        "selected_vector": "OAUTH-STATE-CSRF",
+        "total_score": 75,
+        "base_score": 75,
+        "boost": 0,
+        "boost_reason": "Base severity score",
+        "candidate_ranking": [
+          {
+            "vector_id": "OAUTH-STATE-CSRF",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          }
+        ],
+        "last_endpoint_exploited": "/token"
+      },
+      "vulnerability": {
+        "vector_id": "OAUTH-STATE-CSRF",
+        "category": "CSRF",
+        "description": "Authorization endpoint granted code without validating state parameter presence or entropy.",
+        "exploit_payload": {
+          "mutation_type": "OMITTED",
+          "description": "Omission of state parameter entirely",
+          "status": 200,
+          "body": {
+            "redirect_to": "https://acme-saas.example.com/oauth/redirect?code=acm_30c206793aca81b622d8f88fad196716",
+            "code": "acm_30c206793aca81b622d8f88fad196716",
+            "state": null
+          }
+        },
+        "target_endpoint": "/authorize",
+        "response_status": 200,
+        "response_body": {
+          "redirect_to": "https://acme-saas.example.com/oauth/redirect?code=acm_30c206793aca81b622d8f88fad196716",
+          "code": "acm_30c206793aca81b622d8f88fad196716",
+          "state": null
+        },
+        "poc_summary": "State CSRF flaw succeeded on 3/3 variants. Trigger: Omission of state parameter entirely",
+        "mutations_tested": 3,
+        "mutations_succeeded": 3,
+        "mutation_details": []
+      },
+      "patch": {
+        "vector_id": "OAUTH-STATE-CSRF",
+        "diff_patch": "--- a/target_app_under_test.py\n+++ b/target_app_under_test.py\n@@ -1,3 +1,7 @@\n-    # 3. State Parameter Check (VULNERABILITY: state omitted/not enforced, allowing login CSRF)\n-    # [UNENFORCED IN VULNERABLE BASELINE]\n-\n+    # 3. State Parameter Check (RFC 6749 Section 10.12)\n+    # Enforce state parameter presence and minimum entropy to prevent Login CSRF\n+    if not state or len(state.strip()) < 8:\n+        return JSONResponse(\n+            status_code=400,\n+            content={\"error\": \"invalid_request\", \"error_description\": \"state parameter with sufficient entropy is required for CSRF protection\"}\n+        )",
+        "target_file": "target_app_under_test.py",
+        "explanation": "Structurally inject state presence and entropy guard to block Cross-Site Request Forgery (CSRF).",
+        "lines_changed": 7,
+        "ast_validated": true
+      },
+      "gate_result": {
+        "security_check_passed": true,
+        "golden_path_passed": true,
+        "exploit_output": "Security Gate PASSED: Attack vector OAUTH-STATE-CSRF and all 3 mutation variants successfully neutralized.",
+        "golden_path_output": "All Golden Path functional flows passed successfully (100% functional integrity).",
+        "mutations_tested": 3,
+        "mutations_blocked": 3,
+        "code_quality_passed": true
+      },
+      "status": "PATCHED_AND_VERIFIED"
+    }
+  ],
+  "summary": {
+    "total_rounds": 5,
+    "active_vectors_count": 5,
+    "remediated_vectors_count": 5,
+    "unresolved_vectors_count": 0,
+    "patches_applied": 5,
+    "total_mutations_tested": 17,
+    "total_mutations_blocked": 17,
+    "soundly_converged": true,
+    "functional_regressions": 0
+  }
+}

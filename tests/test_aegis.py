@@ -108,3 +108,60 @@ def test_full_orchestration_cycle():
         assert round_res.status in ("PATCHED_AND_VERIFIED", "BLOCKED_ORIGINALLY")
         if round_res.gate_result is not None:
             assert round_res.gate_result.fully_passed is True
+
+
+def test_umbrella_doctor():
+    """Verifies that the Environment Doctor performs pre-flight checks and route discovery."""
+    from aegis.core.doctor import UmbrellaDoctor
+    workspace_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    doctor = UmbrellaDoctor(workspace_root=workspace_dir)
+    report = doctor.diagnose()
+    assert report.all_passed is True
+    assert len(report.discovered_routes) >= 3
+    route_paths = [r["route_path"] for r in report.discovered_routes]
+    assert "/authorize" in route_paths
+    assert "/token" in route_paths
+
+
+def test_trajectory_tracer(tmp_path):
+    """Verifies that the Trajectory Tracer writes structured audit JSON with adaptive decisions."""
+    from aegis.monitor.tracer import TrajectoryTracer
+    traj_file = tmp_path / "test_traj.json"
+    tracer = TrajectoryTracer(workspace_root=str(tmp_path), trajectory_path=str(traj_file))
+    
+    tracer.log_event("SESSION_START", {"vectors": ["OAUTH-PKCE-DOWNGRADE"]})
+    tracer.log_event("ROUND_START", {
+        "round": 1,
+        "vector_id": "OAUTH-PKCE-DOWNGRADE",
+        "decision": {
+            "total_score": 95,
+            "base_score": 75,
+            "boost": 20,
+            "boost_reason": "Endpoint correlation boost (+20) from preceding /token compromise",
+        }
+    })
+    tracer.log_event("VECTOR_RESOLVED", {"vector_id": "OAUTH-PKCE-DOWNGRADE"})
+    tracer.log_event("SESSION_COMPLETE", {})
+    
+    assert traj_file.exists()
+    import json
+    with open(traj_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    assert len(data["steps"]) >= 4
+    assert len(data["rounds"]) == 1
+    assert data["rounds"][0]["adaptive_decision"]["total_score"] == 95
+
+
+def test_dashboard_export(tmp_path):
+    """Verifies that the standalone HTML dashboard is generated cleanly with all tabs."""
+    from aegis.monitor.dashboard import export_dashboard_file
+    traj_file = tmp_path / "test_traj.json"
+    out_html = tmp_path / "test_dashboard.html"
+    traj_file.write_text('{"summary": {"soundly_converged": true}, "rounds": []}')
+    
+    export_dashboard_file(str(traj_file), str(out_html))
+    assert out_html.exists()
+    html_text = out_html.read_text(encoding="utf-8")
+    assert "Project Umbrella -- Monitoring & Trajectory Inspector" in html_text
+    assert "Adaptive Decision Graph" in html_text
+    assert "AST Code Patches & Diffs" in html_text

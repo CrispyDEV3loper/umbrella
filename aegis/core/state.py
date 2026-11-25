@@ -20,6 +20,7 @@ class VulnerabilityProof(BaseModel):
     poc_summary: str
     mutations_tested: int = 1
     mutations_succeeded: int = 1
+    mutation_details: List[Dict[str, Any]] = Field(default_factory=list)
 
 
 class PatchResult(BaseModel):
@@ -53,6 +54,8 @@ class RoundHistory(BaseModel):
     vector_id: str
     attack_succeeded: bool
     remediation_attempted: bool
+    adaptive_decision: Optional[Dict[str, Any]] = None
+    proof: Optional[VulnerabilityProof] = None
     patch_applied: Optional[PatchResult] = None
     gate_result: Optional[DualGateResult] = None
     status: str  # "BLOCKED_ORIGINALLY", "PATCHED_AND_VERIFIED", "PATCH_FAILED_REGRESSION", "MAX_ATTEMPTS_EXCEEDED"

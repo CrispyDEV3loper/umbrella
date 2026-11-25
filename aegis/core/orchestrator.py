@@ -4,9 +4,9 @@ Manages the cyclic state machine between Red Agent (Adaptive Planner),
 Blue Agent (AST-Guided Patcher), and the Dual-Gate Evaluator until sound convergence.
 """
 
-import sys
+import os
 import importlib
-from typing import Optional, List, Callable, Any
+from typing import Optional, Callable, Any
 from fastapi.testclient import TestClient
 
 from aegis.core.state import AegisState, RoundHistory, VulnerabilityProof
@@ -15,22 +15,47 @@ from aegis.red.agent import RedAgent
 from aegis.blue.aci import AgentComputerInterface
 from aegis.blue.agent import BlueAgent
 from aegis.evaluator.dual_gate import DualGateEvaluator
+from aegis.core.target import TargetProfile
 import aegis.testbed.app as testbed_app
 
 
 class AegisOrchestrator:
-    """Coordinates iterative attack, remediation, and dual-gate evaluation."""
+    """Coordinates iterative attack, remediation, and dual-gate evaluation.
 
-    def __init__(self, workspace_root: str, on_event: Optional[Callable[[str, Any], None]] = None):
+    ``profile`` (a TargetProfile) points the whole loop at a custom bring-your-own-app
+    target. When ``None`` the bundled testbed app is used (original behavior).
+    """
+
+    def __init__(self, workspace_root: str, on_event: Optional[Callable[[str, Any], None]] = None,
+                 profile: Optional[TargetProfile] = None):
         self.workspace_root = workspace_root
         self.on_event = on_event or (lambda event, data: None)
         self.base_url = "http://testserver"
+        self.profile = profile
+
+        # Bind the target module, its FastAPI instance attribute, and the patchable file.
+        if profile is not None:
+            self.target_module = profile.app_module
+            self.app_attr = profile.app_attr
+            self.target_file = os.path.basename(profile.path)
+            # The Blue agent's ACI must be rooted at the target's own directory so
+            # containment still holds while patching the user's file in place.
+            self.aci = AgentComputerInterface(os.path.dirname(os.path.abspath(profile.path)))
+        else:
+            self.target_module = testbed_app
+            self.app_attr = "app"
+            self.target_file = "aegis/testbed/app.py"
+            self.aci = AgentComputerInterface(workspace_root)
+
+        # Capture the target module's spec up front: importlib.reload() clobbers
+        # module.__spec__ to None when the synthetic BYO name is unresolvable,
+        # so a per-call read of __spec__ silently skips the re-exec fallback.
+        self._target_spec = getattr(self.target_module, "__spec__", None)
 
         # Initialize agents
-        self.aci = AgentComputerInterface(workspace_root)
-        self.red_agent = RedAgent(self.base_url)
-        self.blue_agent = BlueAgent(self.aci)
-        self.evaluator = DualGateEvaluator(self.base_url)
+        self.red_agent = RedAgent(self.base_url, profile)
+        self.blue_agent = BlueAgent(self.aci, target_file=self.target_file)
+        self.evaluator = DualGateEvaluator(self.base_url, profile)
 
         # Initialize State
         self.state = AegisState(
@@ -43,11 +68,21 @@ class AegisOrchestrator:
         )
 
     def _get_client(self) -> TestClient:
-        """Reloads the target app module to reflect code patches, returning a TestClient."""
-        # Cleanly reload target module if it was patched on disk
-        if "aegis.testbed.app" in sys.modules:
-            importlib.reload(testbed_app)
-        return TestClient(testbed_app.app, base_url=self.base_url)
+        """Reloads the target module from disk to reflect patches, returning a TestClient."""
+        # Re-exec the target module so on-disk repairs are picked up, then serve it.
+        spec = self._target_spec
+        if spec is not None:
+            try:
+                importlib.reload(self.target_module)
+            except ImportError:
+                # Synthetic BYO module names aren't resolvable by import finders,
+                # so fall back to re-exec'ing the on-disk source into the module
+                # namespace to rebind its app instance and route handlers.
+                with open(spec.origin, "r", encoding="utf-8") as f:
+                    code = compile(f.read(), spec.origin, "exec")
+                exec(code, self.target_module.__dict__)
+        app = getattr(self.target_module, self.app_attr)
+        return TestClient(app, base_url=self.base_url)
 
     def run_all(self, max_rounds: int = 15) -> AegisState:
         """Executes the co-evolutionary loop across all attack vectors until convergence."""
@@ -62,9 +97,10 @@ class AegisOrchestrator:
             vector_id = self.red_agent.plan_next_attack(self.state)
             if not vector_id:
                 break
+            decision_telemetry = self.red_agent.last_decision_telemetry
             self.state.pending_vectors.remove(vector_id)
 
-            self.on_event("ROUND_START", {"round": round_num, "vector_id": vector_id})
+            self.on_event("ROUND_START", {"round": round_num, "vector_id": vector_id, "decision": decision_telemetry})
 
             # --- 2. Red Agent Execution with Mutation Suite ---
             with self._get_client() as client:
@@ -80,6 +116,8 @@ class AegisOrchestrator:
                         vector_id=vector_id,
                         attack_succeeded=False,
                         remediation_attempted=False,
+                        adaptive_decision=decision_telemetry,
+                        proof=None,
                         status="BLOCKED_ORIGINALLY",
                     )
                 )
@@ -87,7 +125,7 @@ class AegisOrchestrator:
 
             # Exploit succeeded -> Vulnerability detected
             self.state.current_proof = proof
-            self.on_event("VULNERABILITY_FOUND", {"proof": proof})
+            self.on_event("VULNERABILITY_FOUND", {"proof": proof, "decision": decision_telemetry})
 
             # --- 3. Blue Agent AST Remediation Turn ---
             attempts = 0
@@ -119,6 +157,8 @@ class AegisOrchestrator:
                             vector_id=vector_id,
                             attack_succeeded=True,
                             remediation_attempted=True,
+                            adaptive_decision=decision_telemetry,
+                            proof=proof,
                             patch_applied=patch,
                             gate_result=gate_result,
                             status="PATCHED_AND_VERIFIED",
@@ -139,6 +179,8 @@ class AegisOrchestrator:
                         vector_id=vector_id,
                         attack_succeeded=True,
                         remediation_attempted=True,
+                        adaptive_decision=decision_telemetry,
+                        proof=proof,
                         status="MAX_ATTEMPTS_EXCEEDED",
                     )
                 )

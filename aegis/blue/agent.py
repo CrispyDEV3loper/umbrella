@@ -9,6 +9,7 @@ from typing import Optional, Dict, Any, Tuple, List
 import os
 import ast
 import re
+import difflib
 from aegis.core.state import VulnerabilityProof, PatchResult
 from aegis.blue.aci import AgentComputerInterface
 
@@ -215,9 +216,19 @@ class BlueAgent:
             return None
 
         lines_changed = len(patch_data["replacement"].splitlines())
+        
+        diff_lines = list(difflib.unified_diff(
+            patch_data["target"].splitlines(),
+            patch_data["replacement"].splitlines(),
+            fromfile=f"a/{self.target_file}",
+            tofile=f"b/{self.target_file}",
+            lineterm="",
+        ))
+        unified_diff_str = "\n".join(diff_lines) if diff_lines else f"- {patch_data['target']}\n+ {patch_data['replacement']}"
+
         return PatchResult(
             vector_id=proof.vector_id,
-            diff_patch=f"- {patch_data['target']}\n+ {patch_data['replacement']}",
+            diff_patch=unified_diff_str,
             target_file=self.target_file,
             explanation=patch_data["explanation"],
             lines_changed=lines_changed,
@@ -227,3 +238,27 @@ class BlueAgent:
     def rollback_patch(self) -> bool:
         """Reverts the last applied patch if regression tests fail."""
         return self.aci.rollback(self.target_file)
+
+    # Anchor signatures the Blue Agent can synthesize repairs against, per vector.
+    # A vector is "patchable" only when its signature already exists in the target.
+    ANCHOR_SIGNATURES = {
+        "OAUTH-PKCE-DOWNGRADE": 'auth_data.get("code_challenge")',
+        "OAUTH-REDIRECT-TRAVERSAL": 'valid_redirect = ',
+        "OAUTH-STATE-CSRF": "# 3. State Parameter Check",
+        "OAUTH-CODE-REPLAY": "auth_data[\"client_id\"]",
+        "OAUTH-SCOPE-ESCALATION": 'granted_scope = req.scope',
+    }
+
+    def anchor_coverage(self) -> Dict[str, bool]:
+        """Reports which vulnerability classes have a patch anchor present in the target file.
+
+        Used at intake time to warn the user up front which vectors can be repaired
+        (True) and which will be detected but left unresolved (False) for this codebase.
+        """
+        full_path = self.aci._resolve_path(self.target_file)
+        with open(full_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        return {
+            vector: (sig in content)
+            for vector, sig in self.ANCHOR_SIGNATURES.items()
+        }

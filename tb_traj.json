@@ -1,0 +1,789 @@
+{
+  "session_id": "umbrella-1795550246",
+  "started_at": "2026-11-24T19:57:26.027206+00:00",
+  "completed_at": "2026-11-24T19:57:26.097273+00:00",
+  "workspace_root": "D:\\capstone saas",
+  "host_metadata": {
+    "os_name": "Windows",
+    "os_release": "10",
+    "os_version": "10.0.26200",
+    "architecture": "AMD64",
+    "python_version": "3.11.9",
+    "python_executable": "C:\\Users\\HP\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "cwd": "D:\\capstone saas",
+    "workspace_root": "D:\\capstone saas"
+  },
+  "initial_vectors": [
+    "OAUTH-PKCE-DOWNGRADE",
+    "OAUTH-REDIRECT-TRAVERSAL",
+    "OAUTH-STATE-CSRF",
+    "OAUTH-CODE-REPLAY",
+    "OAUTH-SCOPE-ESCALATION"
+  ],
+  "steps": [
+    {
+      "step_id": 1,
+      "round_number": 0,
+      "timestamp": "2026-11-24T19:57:26.028208+00:00",
+      "event_type": "SESSION_START",
+      "vector_id": null,
+      "data": {
+        "vectors": [
+          "OAUTH-PKCE-DOWNGRADE",
+          "OAUTH-REDIRECT-TRAVERSAL",
+          "OAUTH-STATE-CSRF",
+          "OAUTH-CODE-REPLAY",
+          "OAUTH-SCOPE-ESCALATION"
+        ]
+      }
+    },
+    {
+      "step_id": 2,
+      "round_number": 1,
+      "timestamp": "2026-11-24T19:57:26.028208+00:00",
+      "event_type": "ROUND_START",
+      "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+      "data": {
+        "round": 1,
+        "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+        "decision": {
+          "selected_vector": "OAUTH-REDIRECT-TRAVERSAL",
+          "total_score": 100,
+          "base_score": 100,
+          "boost": 0,
+          "boost_reason": "Base severity score",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+              "total_score": 100,
+              "base_score": 100,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-CODE-REPLAY",
+              "total_score": 100,
+              "base_score": 100,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-PKCE-DOWNGRADE",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": null
+        }
+      }
+    },
+    {
+      "step_id": 3,
+      "round_number": 0,
+      "timestamp": "2026-11-24T19:57:26.042221+00:00",
+      "event_type": "VECTOR_SECURE",
+      "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+      "data": {
+        "vector_id": "OAUTH-REDIRECT-TRAVERSAL"
+      }
+    },
+    {
+      "step_id": 4,
+      "round_number": 2,
+      "timestamp": "2026-11-24T19:57:26.042221+00:00",
+      "event_type": "ROUND_START",
+      "vector_id": "OAUTH-CODE-REPLAY",
+      "data": {
+        "round": 2,
+        "vector_id": "OAUTH-CODE-REPLAY",
+        "decision": {
+          "selected_vector": "OAUTH-CODE-REPLAY",
+          "total_score": 100,
+          "base_score": 100,
+          "boost": 0,
+          "boost_reason": "Base severity score",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-CODE-REPLAY",
+              "total_score": 100,
+              "base_score": 100,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-PKCE-DOWNGRADE",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": null
+        }
+      }
+    },
+    {
+      "step_id": 5,
+      "round_number": 0,
+      "timestamp": "2026-11-24T19:57:26.054753+00:00",
+      "event_type": "VECTOR_SECURE",
+      "vector_id": "OAUTH-CODE-REPLAY",
+      "data": {
+        "vector_id": "OAUTH-CODE-REPLAY"
+      }
+    },
+    {
+      "step_id": 6,
+      "round_number": 3,
+      "timestamp": "2026-11-24T19:57:26.054753+00:00",
+      "event_type": "ROUND_START",
+      "vector_id": "OAUTH-PKCE-DOWNGRADE",
+      "data": {
+        "round": 3,
+        "vector_id": "OAUTH-PKCE-DOWNGRADE",
+        "decision": {
+          "selected_vector": "OAUTH-PKCE-DOWNGRADE",
+          "total_score": 75,
+          "base_score": 75,
+          "boost": 0,
+          "boost_reason": "Base severity score",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-PKCE-DOWNGRADE",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": null
+        }
+      }
+    },
+    {
+      "step_id": 7,
+      "round_number": 0,
+      "timestamp": "2026-11-24T19:57:26.070723+00:00",
+      "event_type": "VECTOR_SECURE",
+      "vector_id": "OAUTH-PKCE-DOWNGRADE",
+      "data": {
+        "vector_id": "OAUTH-PKCE-DOWNGRADE"
+      }
+    },
+    {
+      "step_id": 8,
+      "round_number": 4,
+      "timestamp": "2026-11-24T19:57:26.070723+00:00",
+      "event_type": "ROUND_START",
+      "vector_id": "OAUTH-STATE-CSRF",
+      "data": {
+        "round": 4,
+        "vector_id": "OAUTH-STATE-CSRF",
+        "decision": {
+          "selected_vector": "OAUTH-STATE-CSRF",
+          "total_score": 75,
+          "base_score": 75,
+          "boost": 0,
+          "boost_reason": "Base severity score",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-STATE-CSRF",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            },
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": null
+        }
+      }
+    },
+    {
+      "step_id": 9,
+      "round_number": 0,
+      "timestamp": "2026-11-24T19:57:26.081266+00:00",
+      "event_type": "VECTOR_SECURE",
+      "vector_id": "OAUTH-STATE-CSRF",
+      "data": {
+        "vector_id": "OAUTH-STATE-CSRF"
+      }
+    },
+    {
+      "step_id": 10,
+      "round_number": 5,
+      "timestamp": "2026-11-24T19:57:26.082265+00:00",
+      "event_type": "ROUND_START",
+      "vector_id": "OAUTH-SCOPE-ESCALATION",
+      "data": {
+        "round": 5,
+        "vector_id": "OAUTH-SCOPE-ESCALATION",
+        "decision": {
+          "selected_vector": "OAUTH-SCOPE-ESCALATION",
+          "total_score": 75,
+          "base_score": 75,
+          "boost": 0,
+          "boost_reason": "Base severity score",
+          "candidate_ranking": [
+            {
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "total_score": 75,
+              "base_score": 75,
+              "boost": 0,
+              "reason": "Base severity score"
+            }
+          ],
+          "last_endpoint_exploited": null
+        }
+      }
+    },
+    {
+      "step_id": 11,
+      "round_number": 0,
+      "timestamp": "2026-11-24T19:57:26.097273+00:00",
+      "event_type": "VECTOR_SECURE",
+      "vector_id": "OAUTH-SCOPE-ESCALATION",
+      "data": {
+        "vector_id": "OAUTH-SCOPE-ESCALATION"
+      }
+    },
+    {
+      "step_id": 12,
+      "round_number": 0,
+      "timestamp": "2026-11-24T19:57:26.097273+00:00",
+      "event_type": "SESSION_COMPLETE",
+      "vector_id": null,
+      "data": {
+        "state": {
+          "target_repo_path": "D:\\capstone saas",
+          "active_vector_ids": [
+            "OAUTH-PKCE-DOWNGRADE",
+            "OAUTH-REDIRECT-TRAVERSAL",
+            "OAUTH-STATE-CSRF",
+            "OAUTH-CODE-REPLAY",
+            "OAUTH-SCOPE-ESCALATION"
+          ],
+          "pending_vectors": [],
+          "remediated_vectors": [
+            "OAUTH-REDIRECT-TRAVERSAL",
+            "OAUTH-CODE-REPLAY",
+            "OAUTH-PKCE-DOWNGRADE",
+            "OAUTH-STATE-CSRF",
+            "OAUTH-SCOPE-ESCALATION"
+          ],
+          "unresolved_vectors": [],
+          "current_proof": null,
+          "current_patch": null,
+          "current_gate_result": null,
+          "history": [
+            {
+              "round_number": 1,
+              "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+              "attack_succeeded": false,
+              "remediation_attempted": false,
+              "adaptive_decision": {
+                "selected_vector": "OAUTH-REDIRECT-TRAVERSAL",
+                "total_score": 100,
+                "base_score": 100,
+                "boost": 0,
+                "boost_reason": "Base severity score",
+                "candidate_ranking": [
+                  {
+                    "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+                    "total_score": 100,
+                    "base_score": 100,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-CODE-REPLAY",
+                    "total_score": 100,
+                    "base_score": 100,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-PKCE-DOWNGRADE",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-STATE-CSRF",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-SCOPE-ESCALATION",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  }
+                ],
+                "last_endpoint_exploited": null
+              },
+              "proof": null,
+              "patch_applied": null,
+              "gate_result": null,
+              "status": "BLOCKED_ORIGINALLY"
+            },
+            {
+              "round_number": 2,
+              "vector_id": "OAUTH-CODE-REPLAY",
+              "attack_succeeded": false,
+              "remediation_attempted": false,
+              "adaptive_decision": {
+                "selected_vector": "OAUTH-CODE-REPLAY",
+                "total_score": 100,
+                "base_score": 100,
+                "boost": 0,
+                "boost_reason": "Base severity score",
+                "candidate_ranking": [
+                  {
+                    "vector_id": "OAUTH-CODE-REPLAY",
+                    "total_score": 100,
+                    "base_score": 100,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-PKCE-DOWNGRADE",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-STATE-CSRF",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-SCOPE-ESCALATION",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  }
+                ],
+                "last_endpoint_exploited": null
+              },
+              "proof": null,
+              "patch_applied": null,
+              "gate_result": null,
+              "status": "BLOCKED_ORIGINALLY"
+            },
+            {
+              "round_number": 3,
+              "vector_id": "OAUTH-PKCE-DOWNGRADE",
+              "attack_succeeded": false,
+              "remediation_attempted": false,
+              "adaptive_decision": {
+                "selected_vector": "OAUTH-PKCE-DOWNGRADE",
+                "total_score": 75,
+                "base_score": 75,
+                "boost": 0,
+                "boost_reason": "Base severity score",
+                "candidate_ranking": [
+                  {
+                    "vector_id": "OAUTH-PKCE-DOWNGRADE",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-STATE-CSRF",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-SCOPE-ESCALATION",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  }
+                ],
+                "last_endpoint_exploited": null
+              },
+              "proof": null,
+              "patch_applied": null,
+              "gate_result": null,
+              "status": "BLOCKED_ORIGINALLY"
+            },
+            {
+              "round_number": 4,
+              "vector_id": "OAUTH-STATE-CSRF",
+              "attack_succeeded": false,
+              "remediation_attempted": false,
+              "adaptive_decision": {
+                "selected_vector": "OAUTH-STATE-CSRF",
+                "total_score": 75,
+                "base_score": 75,
+                "boost": 0,
+                "boost_reason": "Base severity score",
+                "candidate_ranking": [
+                  {
+                    "vector_id": "OAUTH-STATE-CSRF",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  },
+                  {
+                    "vector_id": "OAUTH-SCOPE-ESCALATION",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  }
+                ],
+                "last_endpoint_exploited": null
+              },
+              "proof": null,
+              "patch_applied": null,
+              "gate_result": null,
+              "status": "BLOCKED_ORIGINALLY"
+            },
+            {
+              "round_number": 5,
+              "vector_id": "OAUTH-SCOPE-ESCALATION",
+              "attack_succeeded": false,
+              "remediation_attempted": false,
+              "adaptive_decision": {
+                "selected_vector": "OAUTH-SCOPE-ESCALATION",
+                "total_score": 75,
+                "base_score": 75,
+                "boost": 0,
+                "boost_reason": "Base severity score",
+                "candidate_ranking": [
+                  {
+                    "vector_id": "OAUTH-SCOPE-ESCALATION",
+                    "total_score": 75,
+                    "base_score": 75,
+                    "boost": 0,
+                    "reason": "Base severity score"
+                  }
+                ],
+                "last_endpoint_exploited": null
+              },
+              "proof": null,
+              "patch_applied": null,
+              "gate_result": null,
+              "status": "BLOCKED_ORIGINALLY"
+            }
+          ],
+          "is_converged": true,
+          "total_rounds": 5
+        }
+      }
+    }
+  ],
+  "rounds": [
+    {
+      "round_number": 1,
+      "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+      "timestamp": "2026-11-24T19:57:26.028208+00:00",
+      "threat_info": {
+        "name": "Redirect URI Path Traversal / Wildcard Bypass",
+        "description": "Tests whether authorization endpoint allows redirect_uri manipulation (e.g. directory traversal / path tampering) to leak auth codes.",
+        "category": "REDIRECT_URI",
+        "rfc_reference": "RFC 6749 Section 3.1.2 & RFC 6819 Section 4.4.1.7",
+        "severity": "CRITICAL"
+      },
+      "adaptive_decision": {
+        "selected_vector": "OAUTH-REDIRECT-TRAVERSAL",
+        "total_score": 100,
+        "base_score": 100,
+        "boost": 0,
+        "boost_reason": "Base severity score",
+        "candidate_ranking": [
+          {
+            "vector_id": "OAUTH-REDIRECT-TRAVERSAL",
+            "total_score": 100,
+            "base_score": 100,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-CODE-REPLAY",
+            "total_score": 100,
+            "base_score": 100,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-PKCE-DOWNGRADE",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-STATE-CSRF",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-SCOPE-ESCALATION",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          }
+        ],
+        "last_endpoint_exploited": null
+      },
+      "vulnerability": null,
+      "patch": null,
+      "gate_result": null,
+      "status": "BLOCKED_ORIGINALLY"
+    },
+    {
+      "round_number": 2,
+      "vector_id": "OAUTH-CODE-REPLAY",
+      "timestamp": "2026-11-24T19:57:26.042221+00:00",
+      "threat_info": {
+        "name": "Authorization Code Replay / Multi-Redemption",
+        "description": "Tests if authorization codes can be redeemed multiple times to issue multiple access tokens, violating one-time use requirement.",
+        "category": "REPLAY",
+        "rfc_reference": "RFC 6749 Section 4.1.2",
+        "severity": "CRITICAL"
+      },
+      "adaptive_decision": {
+        "selected_vector": "OAUTH-CODE-REPLAY",
+        "total_score": 100,
+        "base_score": 100,
+        "boost": 0,
+        "boost_reason": "Base severity score",
+        "candidate_ranking": [
+          {
+            "vector_id": "OAUTH-CODE-REPLAY",
+            "total_score": 100,
+            "base_score": 100,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-PKCE-DOWNGRADE",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-STATE-CSRF",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-SCOPE-ESCALATION",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          }
+        ],
+        "last_endpoint_exploited": null
+      },
+      "vulnerability": null,
+      "patch": null,
+      "gate_result": null,
+      "status": "BLOCKED_ORIGINALLY"
+    },
+    {
+      "round_number": 3,
+      "vector_id": "OAUTH-PKCE-DOWNGRADE",
+      "timestamp": "2026-11-24T19:57:26.054753+00:00",
+      "threat_info": {
+        "name": "PKCE Downgrade / Omission Attack",
+        "description": "Tests if authorization code exchange succeeds without code_verifier when code_challenge was provided or omitted, violating RFC 7636.",
+        "category": "PKCE",
+        "rfc_reference": "RFC 7636",
+        "severity": "HIGH"
+      },
+      "adaptive_decision": {
+        "selected_vector": "OAUTH-PKCE-DOWNGRADE",
+        "total_score": 75,
+        "base_score": 75,
+        "boost": 0,
+        "boost_reason": "Base severity score",
+        "candidate_ranking": [
+          {
+            "vector_id": "OAUTH-PKCE-DOWNGRADE",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-STATE-CSRF",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-SCOPE-ESCALATION",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          }
+        ],
+        "last_endpoint_exploited": null
+      },
+      "vulnerability": null,
+      "patch": null,
+      "gate_result": null,
+      "status": "BLOCKED_ORIGINALLY"
+    },
+    {
+      "round_number": 4,
+      "vector_id": "OAUTH-STATE-CSRF",
+      "timestamp": "2026-11-24T19:57:26.070723+00:00",
+      "threat_info": {
+        "name": "State Parameter Omission / Login CSRF",
+        "description": "Tests if client or authorization server completes the flow when state parameter is omitted, allowing cross-site request forgery.",
+        "category": "CSRF",
+        "rfc_reference": "RFC 6749 Section 10.12",
+        "severity": "HIGH"
+      },
+      "adaptive_decision": {
+        "selected_vector": "OAUTH-STATE-CSRF",
+        "total_score": 75,
+        "base_score": 75,
+        "boost": 0,
+        "boost_reason": "Base severity score",
+        "candidate_ranking": [
+          {
+            "vector_id": "OAUTH-STATE-CSRF",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          },
+          {
+            "vector_id": "OAUTH-SCOPE-ESCALATION",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          }
+        ],
+        "last_endpoint_exploited": null
+      },
+      "vulnerability": null,
+      "patch": null,
+      "gate_result": null,
+      "status": "BLOCKED_ORIGINALLY"
+    },
+    {
+      "round_number": 5,
+      "vector_id": "OAUTH-SCOPE-ESCALATION",
+      "timestamp": "2026-11-24T19:57:26.082265+00:00",
+      "threat_info": {
+        "name": "Unauthorized Scope Injection / Privilege Escalation",
+        "description": "Tests if token endpoint grants elevated scopes (e.g., admin, write:all) that were never consented to in the authorization step.",
+        "category": "PRIVILEGE_ESCALATION",
+        "rfc_reference": "RFC 6749 Section 3.3",
+        "severity": "HIGH"
+      },
+      "adaptive_decision": {
+        "selected_vector": "OAUTH-SCOPE-ESCALATION",
+        "total_score": 75,
+        "base_score": 75,
+        "boost": 0,
+        "boost_reason": "Base severity score",
+        "candidate_ranking": [
+          {
+            "vector_id": "OAUTH-SCOPE-ESCALATION",
+            "total_score": 75,
+            "base_score": 75,
+            "boost": 0,
+            "reason": "Base severity score"
+          }
+        ],
+        "last_endpoint_exploited": null
+      },
+      "vulnerability": null,
+      "patch": null,
+      "gate_result": null,
+      "status": "BLOCKED_ORIGINALLY"
+    }
+  ],
+  "summary": {
+    "total_rounds": 5,
+    "active_vectors_count": 5,
+    "remediated_vectors_count": 5,
+    "unresolved_vectors_count": 0,
+    "patches_applied": 0,
+    "total_mutations_tested": 0,
+    "total_mutations_blocked": 0,
+    "soundly_converged": true,
+    "functional_regressions": 0
+  }
+}
