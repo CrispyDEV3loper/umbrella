@@ -481,7 +481,7 @@ def generate_dashboard_html(trajectory_data: Dict[str, Any], doctor_data: Option
       const box = document.getElementById('saas-result-box');
       if (!LIVE_MODE) {{
         box.style.display = 'block';
-        box.innerText = 'This dashboard was exported as a static file (file://).\nSaaS runs require the live monitor server: run  python main.py --serve  and open http://127.0.0.1:<port>/';
+        box.innerText = 'This dashboard was exported as a static file (file://).\\nSaaS runs require the live monitor server: run  python main.py --serve  and open http://127.0.0.1:<port>/';
         return;
       }}
       status.innerText = 'Running Red/Blue/Dual-Gate flow on target...';
